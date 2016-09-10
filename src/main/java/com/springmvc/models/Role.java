@@ -8,28 +8,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "users")
-public class User {
-
+@Table(name = "roles")
+public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	@NotNull
-	private String nickname;
-
-	@NotNull
 	private String name;
-
-	@NotNull
-	private String password;
 
 	@NotNull
 	private Timestamp createdAt;
@@ -37,11 +28,8 @@ public class User {
 	@NotNull
 	private Timestamp updatedAt;
 	
-	@ManyToMany
-    @JoinTable(name="users_roles",
-        joinColumns = @JoinColumn(name="user_id", referencedColumnName="id"),
-        inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
-	private Set<Role> roles = new HashSet<Role>(0); 
+	@ManyToMany(mappedBy="roles")
+	private Set<User> users = new HashSet<User>(0);
 
 	public long getId() {
 		return id;
@@ -51,28 +39,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -91,12 +63,13 @@ public class User {
 		this.updatedAt = updatedAt;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
+	public Set<User> getUsers() {
+		return users;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
-
+	
+	
 }

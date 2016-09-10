@@ -1,97 +1,140 @@
 package com.springmvc.controllers;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.common.collect.Maps;
 import com.springmvc.daos.UserDao;
+import com.springmvc.forms.UserForm;
 import com.springmvc.models.User;
+import com.springmvc.utils.DateTimeUtil;
 
-/**
- * Class UserController
- */
-@Controller("/user")
+@RestController
+@RequestMapping("/user")
 public class UserController {
-
-  // ------------------------
-  // PUBLIC METHODS
-  // ------------------------
-
-  /**
-   * Create a new user with an auto-generated id and email and name as passed 
-   * values.
-   */
-  @RequestMapping(value="/create")
-  @ResponseBody
-  public String create(String email, String name) {
-    try {
-      User user = new User(email, name);
-      userDao.save(user);
-    }
-    catch (Exception ex) {
-      return "Error creating the user: " + ex.toString();
-    }
-    return "User succesfully created!";
-  }
-  
-  /**
-   * Delete the user with the passed id.
-   */
-  @RequestMapping(value="/delete")
-  @ResponseBody
-  public String delete(long id) {
-    try {
-      User user = new User(id);
-      userDao.delete(user);
-    }
-    catch (Exception ex) {
-      return "Error deleting the user: " + ex.toString();
-    }
-    return "User succesfully deleted!";
-  }
-  
-  /**
-   * Retrieve the id for the user with the passed email address.
-   */
-  @RequestMapping(value="/get-by-email")
-  @ResponseBody
-  public String getByEmail(String email) {
-    String userId;
-    try {
-      User user = userDao.findByEmail(email);
-      userId = String.valueOf(user.getId());
-    }
-    catch (Exception ex) {
-      return "User not found: " + ex.toString();
-    }
-    return "The user id is: " + userId;
-  }
-  
-  /**
-   * Update the email and the name for the user indentified by the passed id.
-   */
-  @RequestMapping(value="/update")
-  @ResponseBody
-  public String updateName(long id, String email, String name) {
-    try {
-      User user = userDao.findOne(id);
-      user.setEmail(email);
-      user.setName(name);
-      userDao.save(user);
-    }
-    catch (Exception ex) {
-      return "Error updating the user: " + ex.toString();
-    }
-    return "User succesfully updated!";
-  } 
-
-  // ------------------------
-  // PRIVATE FIELDS
-  // ------------------------
-  
-  // Wire the UserDao used inside this controller.
-  @Autowired
-  private UserDao userDao;
-  
+	
+	@Autowired UserDao userDao;
+	
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public ModelAndView listAllUsers() {
+		ModelAndView mv = new ModelAndView("/user/index");
+		
+		Iterable<User> userList = userDao.findAll();
+		
+		mv.addObject("userList", userList);
+		return mv;
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ModelAndView show(@PathVariable("id") Long id) {
+		ModelAndView mv = new ModelAndView("/user/show");
+		
+		User user = userDao.findOne(id);
+		
+		mv.addObject("user", user);
+		return mv;
+	}
+	
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public ModelAndView add(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("/user/add", "user", new User());
+		
+		return mv;
+	}
+	
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	public ModelAndView create(HttpServletRequest request, @Valid @ModelAttribute("user") UserForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+		
+		if (result.hasErrors()) {
+			redirectAttr.addFlashAttribute("notice", result.getFieldErrors());
+			return new ModelAndView("/user/add");
+		}
+		
+		// encode the password in the form
+		// PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    	// form.setPassword(passwordEncoder.encode(form.getPassword()));
+		
+		// add a user
+		User user = new User();
+		BeanUtils.copyProperties(form, user);
+		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
+		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		userDao.save(user);
+		
+		redirectAttr.addFlashAttribute("notice", "Created success!");
+		
+		return new ModelAndView("redirect:/user");
+	}
+	
+	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+	public ModelAndView edit(HttpServletRequest request, @PathVariable("id") Long id) {
+		ModelAndView mv = new ModelAndView("/user/edit");
+		
+		User user = userDao.findOne(id);
+		
+		mv.addObject("user", user);
+		return mv;
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ModelAndView update(@PathVariable("id") Long id, @Valid UserForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+		
+		if (result.hasErrors()) {
+			redirectAttr.addFlashAttribute("alert", result.getFieldErrors());
+			return new ModelAndView("redirect:/user/" + id + "/edit");
+		}
+		
+		User user = userDao.findOne(id);
+		BeanUtils.copyProperties(form, user);
+		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		userDao.save(user);
+		
+		redirectAttr.addFlashAttribute("notice", "更新成功!");
+		return new ModelAndView("redirect:/user");
+	}
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+	public ModelAndView delete(@PathVariable("id") Long id, final RedirectAttributes redirectAttr) {
+		
+		userDao.delete(id);
+		
+		redirectAttr.addFlashAttribute("notice", "Delete success!");
+		
+		return new ModelAndView("redirect:/user");
+	}
+	
+	@RequestMapping("/save-fail-test")
+	@ResponseBody
+	@Transactional
+	public Map<String, Object> saveFailTest(HttpServletRequest request) throws Exception {
+		// add a user
+		User user = new User();
+		user.setName("lily");
+		user.setNickname("Lily");
+		user.setPassword("password");
+		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
+		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		userDao.save(user);
+		
+		if (user.getId() > 0) throw new RuntimeException("Please rollback!");
+		
+		return Maps.newHashMap();
+	}
+	
 }

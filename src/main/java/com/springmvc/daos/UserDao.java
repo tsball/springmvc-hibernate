@@ -19,10 +19,10 @@ import com.springmvc.models.User;
 public interface UserDao extends CrudRepository<User, Long> {
 
   /**
-   * Return the user having the passed email or null if no user is found.
+   * Return the user having the passed name or null if no user is found.
    * 
-   * @param email the user email.
+   * @param name the user name.
    */
-  public User findByEmail(String email);
+  public User findByName(String name);
 
-} // class UserDao
+}
