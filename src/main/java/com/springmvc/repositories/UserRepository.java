@@ -1,4 +1,4 @@
-package com.springmvc.daos;
+package com.springmvc.repositories;
 
 import javax.transaction.Transactional;
 
@@ -16,7 +16,7 @@ import com.springmvc.models.User;
  * @author netgloo
  */
 @Transactional
-public interface UserDao extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
   /**
    * Return the user having the passed name or null if no user is found.

@@ -21,6 +21,7 @@
 		<!-- 编译jdk版本 -->
 		<jdk.version>1.7</jdk.version>
 		<tomcat.version>8.0.3</tomcat.version>
+		<activiti.version>5.21.0</activiti.version>
 	</properties>
 	
 	<build>
@@ -96,6 +97,18 @@
 	      <groupId>org.springframework.boot</groupId>
 	      <artifactId>spring-boot-starter-data-jpa</artifactId>
 	    </dependency>
+	    
+	    <!-- activiti - work flow framework -->
+		<dependency>
+		    <groupId>org.activiti</groupId>
+		    <artifactId>activiti-spring-boot-starter-basic</artifactId>
+		    <version>${activiti.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring-boot-starter-jpa</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
 
 		<!-- mysql -->
 		<dependency>

@@ -20,16 +20,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Maps;
-import com.springmvc.daos.UserDao;
 import com.springmvc.forms.UserForm;
 import com.springmvc.models.User;
+import com.springmvc.repositories.UserRepository;
 import com.springmvc.utils.DateTimeUtil;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	
-	@Autowired UserDao userDao;
+	@Autowired UserRepository userDao;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
