@@ -70,6 +70,23 @@ public class PersonController {
 		return mv;
     }
 	
+	@RequestMapping(value="/{id}/leaves", method= RequestMethod.GET)
+    public ModelAndView leaves(@PathVariable("id") Long id) {
+		ModelAndView mv = new ModelAndView("/person/leaves");
+		
+		Person person = personRepository.findOne(id);
+		
+        List<Task> tasks = activitiTaskService.getTasks(id);
+        List<TaskRepresentation> taskRepresentations = new ArrayList<TaskRepresentation>();
+        for (Task task : tasks) {
+        	taskRepresentations.add(new TaskRepresentation(task.getId(), task.getName()));
+        }
+        
+        mv.addObject("person", person);
+        mv.addObject("taskRepresentations", taskRepresentations);
+		return mv;
+    }
+	
 	@RequestMapping(value="/{id}/tasks", method = RequestMethod.POST)
 	public ModelAndView startTask(@PathVariable("id") Long id, final RedirectAttributes redirectAttr) {
 		
