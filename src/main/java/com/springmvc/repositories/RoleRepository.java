@@ -4,7 +4,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.springmvc.models.User;
+import com.springmvc.models.Role;
 
 /**
  * A DAO for the entity User is simply created by extending the CrudRepository
@@ -16,13 +16,6 @@ import com.springmvc.models.User;
  * @author netgloo
  */
 @Transactional
-public interface UserRepository extends CrudRepository<User, Long> {
-
-  /**
-   * Return the user having the passed name or null if no user is found.
-   * 
-   * @param username the user name.
-   */
-  public User findByUsername(String username);
+public interface RoleRepository extends CrudRepository<Role, Long> {
 
 }

@@ -21,6 +21,9 @@ public class Role {
 
 	@NotNull
 	private String name;
+	
+	@NotNull
+	private String code;
 
 	@NotNull
 	private Timestamp createdAt;
@@ -69,6 +72,14 @@ public class Role {
 
 	public void setUsers(Set<User> users) {
 		this.users = users;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	

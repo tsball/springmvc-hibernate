@@ -17,16 +17,14 @@
 	<table border="1">
 		<thead>
 			<tr>
-				<th width="200">Name</th>
-				<th width="200">Nick Name</th>
+				<th width="200">User Name</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${userList}" var="obj">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/user/${obj.id}">${obj.name}</a></td>
-				<td>${obj.nickname}</td>
+				<td><a href="${pageContext.request.contextPath}/user/${obj.id}">${obj.username}</a></td>
 				<td>
 					<a href="${pageContext.request.contextPath}/user/${obj.id}/edit">Edit</a>
 					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/user/${obj.id}" data-method="DELETE">Delete</a>

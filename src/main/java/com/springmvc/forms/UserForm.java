@@ -9,28 +9,17 @@ public class UserForm {
 
 	@NotNull
     @Size(min=5, max=16)
-	private String name;
+	private String username;
 
-	@NotEmpty
-	private String nickname;
-	
 	@NotEmpty
 	private String password;
 
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {

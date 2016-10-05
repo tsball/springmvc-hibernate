@@ -98,6 +98,12 @@
 	      <artifactId>spring-boot-starter-data-jpa</artifactId>
 	    </dependency>
 	    
+	    <!-- sign in/out -->
+	    <dependency>
+	   	  	<groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-security</artifactId>
+	    </dependency>
+	    
 	    <!-- activiti - work flow framework -->
 		<dependency>
 		    <groupId>org.activiti</groupId>

@@ -16,11 +16,7 @@
 		<form:errors path="*" cssClass="errorblock" element="div" />
 		<div>
 			<label>姓名</label>
-			<form:input path="name" />
-		</div>
-		<div>
-			<label>昵称</label>
-			<input type="text" name="nickname" />
+			<form:input path="username" />
 		</div>
 		<div>
 			<label>密码</label>

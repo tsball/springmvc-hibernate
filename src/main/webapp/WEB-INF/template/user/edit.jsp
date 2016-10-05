@@ -15,12 +15,8 @@
 	<div>${alert}</div>
 	<form:form modelAttribute="user" action="${pageContext.request.contextPath}/user/${user.id}" method="PUT">
 		<div>
-			<form:label path="name">用户名</form:label>
-			<form:input path="name" />
-		</div>
-		<div>
-			<form:label path="nickname">昵称</form:label>
-			<form:input path="nickname" />
+			<form:label path="username">用户名</form:label>
+			<form:input path="username" />
 		</div>
 		<div>
 			<form:label path="password">密码</form:label>

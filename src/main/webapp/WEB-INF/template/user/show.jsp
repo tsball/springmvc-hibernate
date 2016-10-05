@@ -13,11 +13,7 @@
 	<h1>User</h1>
 	<div>
 		<label>姓名</label>
-		${user.name}
-	</div>
-	<div>
-		<label>昵称</label>
-		${user.nickname}
+		${user.username}
 	</div>
 	<div>
 		<label>角色</label>

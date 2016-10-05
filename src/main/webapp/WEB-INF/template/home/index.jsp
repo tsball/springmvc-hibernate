@@ -22,7 +22,7 @@
 	</ul>
 </p>
 <p>
-	<a href="signout">退出</a>
+	<a href="/signout">退出</a>
 </p>
 </body>
 </html>

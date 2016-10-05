@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,13 +30,14 @@ import com.springmvc.utils.DateTimeUtil;
 @RequestMapping("/user")
 public class UserController {
 	
-	@Autowired UserRepository userDao;
+	@Autowired UserRepository userRepository;
+	@Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
 		ModelAndView mv = new ModelAndView("/user/index");
 		
-		Iterable<User> userList = userDao.findAll();
+		Iterable<User> userList = userRepository.findAll();
 		
 		mv.addObject("userList", userList);
 		return mv;
@@ -45,7 +47,7 @@ public class UserController {
 	public ModelAndView show(@PathVariable("id") Long id) {
 		ModelAndView mv = new ModelAndView("/user/show");
 		
-		User user = userDao.findOne(id);
+		User user = userRepository.findOne(id);
 		
 		mv.addObject("user", user);
 		return mv;
@@ -73,9 +75,10 @@ public class UserController {
 		// add a user
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		userDao.save(user);
+		userRepository.save(user);
 		
 		redirectAttr.addFlashAttribute("notice", "Created success!");
 		
@@ -86,7 +89,7 @@ public class UserController {
 	public ModelAndView edit(HttpServletRequest request, @PathVariable("id") Long id) {
 		ModelAndView mv = new ModelAndView("/user/edit");
 		
-		User user = userDao.findOne(id);
+		User user = userRepository.findOne(id);
 		
 		mv.addObject("user", user);
 		return mv;
@@ -100,10 +103,10 @@ public class UserController {
 			return new ModelAndView("redirect:/user/" + id + "/edit");
 		}
 		
-		User user = userDao.findOne(id);
+		User user = userRepository.findOne(id);
 		BeanUtils.copyProperties(form, user);
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		userDao.save(user);
+		userRepository.save(user);
 		
 		redirectAttr.addFlashAttribute("notice", "更新成功!");
 		return new ModelAndView("redirect:/user");
@@ -112,7 +115,7 @@ public class UserController {
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	public ModelAndView delete(@PathVariable("id") Long id, final RedirectAttributes redirectAttr) {
 		
-		userDao.delete(id);
+		userRepository.delete(id);
 		
 		redirectAttr.addFlashAttribute("notice", "Delete success!");
 		
@@ -125,12 +128,11 @@ public class UserController {
 	public Map<String, Object> saveFailTest(HttpServletRequest request) throws Exception {
 		// add a user
 		User user = new User();
-		user.setName("lily");
-		user.setNickname("Lily");
+		user.setUsername("lily");
 		user.setPassword("password");
 		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		userDao.save(user);
+		userRepository.save(user);
 		
 		if (user.getId() > 0) throw new RuntimeException("Please rollback!");
 		
