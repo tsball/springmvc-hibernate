@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>User List</title>
 
 </head>
@@ -43,7 +45,8 @@ $(function(){
 		
 		var url = $(this).attr('data-href');
 		var http_verb = $(this).attr('data-method');
-		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" /></form>').submit();
+		var csrf = '<input type="hidden" name="_csrf" value="${_csrf.token}"/>';
+		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" />'+ csrf +'</form>').submit();
 	});
 });
 </script>

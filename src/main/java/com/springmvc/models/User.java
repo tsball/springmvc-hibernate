@@ -16,8 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,16 +33,16 @@ public class User implements UserDetails {
 	@Column(nullable = false, unique = true)
 	private String username;
 
-	@NotNull
+	@Column(nullable = false)
 	private String password;
 	
-	@Transient
-	private String passwordConfirm;
-
-	@NotNull
+	//@Transient
+	//private String passwordConfirm;
+	
+	@Column(nullable = false)
 	private Timestamp createdAt;
-
-	@NotNull
+	
+	@Column(nullable = false)
 	private Timestamp updatedAt;
 	
 	@ManyToMany
@@ -84,14 +82,6 @@ public class User implements UserDetails {
 
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
 	}
 
 	public Timestamp getUpdatedAt() {

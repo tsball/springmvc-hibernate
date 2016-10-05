@@ -40,7 +40,7 @@ public class AuthController {
 
         userService.save(userForm);
 
-        securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
+        securityService.autologin(userForm.getUsername(), userForm.getPassword());
 
         return new ModelAndView("redirect:/");
     }

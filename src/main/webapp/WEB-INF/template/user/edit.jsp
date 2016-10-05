@@ -19,10 +19,6 @@
 			<form:input path="username" />
 		</div>
 		<div>
-			<form:label path="password">密码</form:label>
-			<form:input path="password" />
-		</div>
-		<div>
 			<button type="submit">提交</button>
 		</div>
 	</form:form>

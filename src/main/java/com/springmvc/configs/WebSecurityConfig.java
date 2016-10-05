@@ -49,7 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    	System.out.println(bCryptPasswordEncoder().encode("11111111"));
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     	//auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN"); // default account
     }

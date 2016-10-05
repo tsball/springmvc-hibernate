@@ -1,18 +1,20 @@
 package com.springmvc.forms;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserForm {
 
-	@NotNull
-    @Size(min=5, max=16)
+	@NotEmpty
+	@Size(min=6, max=20)
 	private String username;
 
 	@NotEmpty
+	@Size(min=6, max=20)
 	private String password;
+	
+	private String passwordConfirm;
 
 	public String getUsername() {
 		return username;
@@ -30,4 +32,11 @@ public class UserForm {
 		this.password = password;
 	}
 
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
 }

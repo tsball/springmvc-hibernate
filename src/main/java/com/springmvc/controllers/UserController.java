@@ -21,10 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Maps;
+import com.springmvc.forms.UserEditForm;
 import com.springmvc.forms.UserForm;
 import com.springmvc.models.User;
 import com.springmvc.repositories.UserRepository;
 import com.springmvc.utils.DateTimeUtil;
+import com.springmvc.validators.UserValidator;
 
 @RestController
 @RequestMapping("/user")
@@ -32,6 +34,7 @@ public class UserController {
 	
 	@Autowired UserRepository userRepository;
 	@Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired UserValidator userValidtor;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
@@ -55,13 +58,14 @@ public class UserController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("/user/add", "user", new User());
+		ModelAndView mv = new ModelAndView("/user/add", "user", new UserForm());
 		
 		return mv;
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ModelAndView create(HttpServletRequest request, @Valid @ModelAttribute("user") UserForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+		userValidtor.validate(form, result);
 		
 		if (result.hasErrors()) {
 			redirectAttr.addFlashAttribute("notice", result.getFieldErrors());
@@ -96,7 +100,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ModelAndView update(@PathVariable("id") Long id, @Valid UserForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ModelAndView update(@PathVariable("id") Long id, @Valid UserEditForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
 			redirectAttr.addFlashAttribute("alert", result.getFieldErrors());
