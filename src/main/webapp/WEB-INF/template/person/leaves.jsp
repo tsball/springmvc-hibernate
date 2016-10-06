@@ -27,6 +27,9 @@
 				<td>${obj.id}</td>
 				<td>${obj.name}</td>
 				<td>
+					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leave/${obj.id}/agree" data-method="PATCH">Agree</a>
+					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leave/${obj.id}/reject" data-method="PATCH">Reject</a>
+					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leave/${obj.id}" data-method="DELETE">Delete</a>
 				</td>
 			</tr>
 			</c:forEach>

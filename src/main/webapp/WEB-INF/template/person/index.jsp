@@ -29,7 +29,7 @@
 				<td>${obj.firstName}</td>
 				<td>${obj.lastName}</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/person/${obj.id}/leaves">View Leave</a>
+					<a href="${pageContext.request.contextPath}/leave">View Leave</a>
 					<a href="${pageContext.request.contextPath}/person/${obj.id}/tasks">View Tasks</a>
 					<a href="${pageContext.request.contextPath}/person/${obj.id}/edit">Edit</a>
 					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/person/${obj.id}" data-method="DELETE">Delete</a>
@@ -48,7 +48,8 @@ $(function(){
 		
 		var url = $(this).attr('data-href');
 		var http_verb = $(this).attr('data-method');
-		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" /></form>').submit();
+		var csrf = '<input type="hidden" name="_csrf" value="${_csrf.token}"/>';
+		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" />'+ csrf +'</form>').submit();
 	});
 });
 </script>

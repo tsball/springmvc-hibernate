@@ -16,7 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Resource(name="customDetailService") // Can not use @Autowired, duplicate with IdentityServiceUserDetailsService
+    @Resource(name="customDetailService") // Can not use @Autowired, conflict with IdentityServiceUserDetailsService
     private UserDetailsService userDetailsService;
 
     @Bean

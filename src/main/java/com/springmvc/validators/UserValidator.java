@@ -7,12 +7,11 @@ import org.springframework.validation.Validator;
 
 import com.springmvc.forms.UserForm;
 import com.springmvc.models.User;
-import com.springmvc.services.UserService;
+import com.springmvc.repositories.UserRepository;
 
 @Component
 public class UserValidator implements Validator {
-    @Autowired
-    private UserService userService;
+    @Autowired UserRepository userRepository;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -24,7 +23,7 @@ public class UserValidator implements Validator {
     	UserForm user = (UserForm) o;
 
         // ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-        if (userService.findByUsername(user.getUsername()) != null) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.user.username");
         }
         
