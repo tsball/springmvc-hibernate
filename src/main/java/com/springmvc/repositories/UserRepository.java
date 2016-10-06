@@ -2,7 +2,7 @@ package com.springmvc.repositories;
 
 import javax.transaction.Transactional;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.springmvc.models.User;
 
@@ -16,7 +16,7 @@ import com.springmvc.models.User;
  * @author netgloo
  */
 @Transactional
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
   /**
    * Return the user having the passed name or null if no user is found.

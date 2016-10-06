@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -44,7 +45,7 @@ public class UserController {
 	public ModelAndView listAllUsers() {
 		ModelAndView mv = new ModelAndView("/user/index");
 		
-		Iterable<User> userList = userRepository.findAll();
+		Iterable<User> userList = userRepository.findAll(new Sort(Sort.Direction.ASC, "username"));
 		
 		mv.addObject("userList", userList);
 		return mv;
@@ -64,7 +65,7 @@ public class UserController {
 	public ModelAndView add(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("/user/add", "user", new UserForm());
 		
-		Iterable<Role> roles = roleRepository.findAll();
+		Iterable<Role> roles = roleRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
 		
 		mv.addObject("roles", roles);
 		return mv;
@@ -79,7 +80,7 @@ public class UserController {
 			return new ModelAndView("/user/add");
 		}
 		
-		Iterable<Role> roles = roleRepository.findAll(form.getRoles());
+		Iterable<Role> roles = roleRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
 		
 		// add a user
 		User user = new User();
