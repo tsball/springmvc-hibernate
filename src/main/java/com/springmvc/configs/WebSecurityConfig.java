@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/css/**", "/js/**").permitAll()
+                    .antMatchers("/css/**", "/js/**", "/auth/registration").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    	//auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN"); // default account
+    	// auth.inMemoryAuthentication().withUser("admin").password("admin").roles(RoleCode.ADMIN.toString()); // default account
+    	auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 }

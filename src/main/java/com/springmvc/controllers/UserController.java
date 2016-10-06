@@ -21,9 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.springmvc.forms.UserEditForm;
 import com.springmvc.forms.UserForm;
+import com.springmvc.models.Role;
 import com.springmvc.models.User;
+import com.springmvc.repositories.RoleRepository;
 import com.springmvc.repositories.UserRepository;
 import com.springmvc.utils.DateTimeUtil;
 import com.springmvc.validators.UserValidator;
@@ -33,6 +36,7 @@ import com.springmvc.validators.UserValidator;
 public class UserController {
 	
 	@Autowired UserRepository userRepository;
+	@Autowired RoleRepository roleRepository;
 	@Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired UserValidator userValidtor;
 	
@@ -60,6 +64,9 @@ public class UserController {
 	public ModelAndView add(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("/user/add", "user", new UserForm());
 		
+		Iterable<Role> roles = roleRepository.findAll();
+		
+		mv.addObject("roles", roles);
 		return mv;
 	}
 	
@@ -72,9 +79,7 @@ public class UserController {
 			return new ModelAndView("/user/add");
 		}
 		
-		// encode the password in the form
-		// PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    	// form.setPassword(passwordEncoder.encode(form.getPassword()));
+		Iterable<Role> roles = roleRepository.findAll(form.getRoles());
 		
 		// add a user
 		User user = new User();
@@ -82,6 +87,7 @@ public class UserController {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		user.setRoles(Sets.newHashSet(roles));
 		userRepository.save(user);
 		
 		redirectAttr.addFlashAttribute("notice", "Created success!");
@@ -94,8 +100,10 @@ public class UserController {
 		ModelAndView mv = new ModelAndView("/user/edit");
 		
 		User user = userRepository.findOne(id);
+		Iterable<Role> roles = roleRepository.findAll();
 		
 		mv.addObject("user", user);
+		mv.addObject("roles", roles);
 		return mv;
 	}
 	
@@ -107,9 +115,12 @@ public class UserController {
 			return new ModelAndView("redirect:/user/" + id + "/edit");
 		}
 		
+		Iterable<Role> roles = roleRepository.findAll(form.getRoles());
+		
 		User user = userRepository.findOne(id);
 		BeanUtils.copyProperties(form, user);
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		user.setRoles(Sets.newHashSet(roles));
 		userRepository.save(user);
 		
 		redirectAttr.addFlashAttribute("notice", "更新成功!");

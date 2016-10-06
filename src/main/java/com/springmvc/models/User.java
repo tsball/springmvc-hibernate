@@ -104,7 +104,7 @@ public class User implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		for (Role role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role.getCode()));
+			authorities.add(new SimpleGrantedAuthority(role.getCode().toString()));
 		}
 	    return authorities;
 	}

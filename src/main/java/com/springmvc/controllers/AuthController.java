@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.springmvc.forms.UserForm;
 import com.springmvc.models.User;
 import com.springmvc.repositories.RoleRepository;
 import com.springmvc.repositories.UserRepository;
@@ -31,13 +32,13 @@ public class AuthController {
     public ModelAndView registration() {
     	ModelAndView mv = new ModelAndView("auth/registration");
     	
-        mv.addObject("userForm", new User());
+        mv.addObject("userForm", new UserForm());
 
         return mv;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ModelAndView registration(@ModelAttribute("userForm") User form, BindingResult bindingResult) {
+    public ModelAndView registration(@ModelAttribute("userForm") UserForm form, BindingResult bindingResult) {
         userValidator.validate(form, bindingResult);
 
         if (bindingResult.hasErrors()) {

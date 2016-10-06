@@ -4,26 +4,14 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class UserForm {
-
-	@NotEmpty
-	@Size(min=6, max=20)
-	private String username;
+public class UserForm extends UserEditForm {
 
 	@NotEmpty
 	@Size(min=6, max=20)
 	private String password;
 	
 	private String passwordConfirm;
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
+	
 	public String getPassword() {
 		return password;
 	}
@@ -39,4 +27,5 @@ public class UserForm {
 	public void setPasswordConfirm(String passwordConfirm) {
 		this.passwordConfirm = passwordConfirm;
 	}
+
 }
