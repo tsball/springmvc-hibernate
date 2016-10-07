@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springmvc.forms.PersonForm;
-import com.springmvc.forms.UserForm;
 import com.springmvc.models.Person;
 import com.springmvc.repositories.PersonRepository;
 import com.springmvc.representations.TaskRepresentation;
@@ -107,23 +108,20 @@ public class PersonController {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ModelAndView create(HttpServletRequest request, @Valid @ModelAttribute("person") PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ResponseEntity<Object> create(HttpServletRequest request, @Valid @ModelAttribute("person") PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
-			redirectAttr.addFlashAttribute("notice", result.getFieldErrors());
-			return new ModelAndView("/person/add");
+			return new ResponseEntity<Object>(result.getFieldErrors(), HttpStatus.NOT_ACCEPTABLE);
 		}
 		
-		// add a user
-		Person user = new Person();
-		BeanUtils.copyProperties(form, user);
-		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
-		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		personRepository.save(user);
+		Person person = new Person();
+		BeanUtils.copyProperties(form, person);
+		person.setCreatedAt(DateTimeUtil.getCurrTimestamp());
+		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		personRepository.save(person);
 		
-		redirectAttr.addFlashAttribute("notice", "Created success!");
-		
-		return new ModelAndView("redirect:/person");
+		redirectAttr.addFlashAttribute("notice", "Create successed!");
+		return new ResponseEntity<Object>(person, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
@@ -137,20 +135,24 @@ public class PersonController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ModelAndView update(@PathVariable("id") Long id, @Valid UserForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ResponseEntity<Object> update(@PathVariable("id") Long id, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
-			redirectAttr.addFlashAttribute("alert", result.getFieldErrors());
-			return new ModelAndView("redirect:/person/" + id + "/edit");
+			return new ResponseEntity<Object>(result.getFieldErrors(), HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		Person person = personRepository.findOne(id);
+		
+		if (person == null) {
+			return new ResponseEntity<Object>("Person can not found with id: " + id, HttpStatus.NOT_FOUND);
+		}
+		
 		BeanUtils.copyProperties(form, person);
 		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		personRepository.save(person);
 		
 		redirectAttr.addFlashAttribute("notice", "Update successed!");
-		return new ModelAndView("redirect:/person");
+		return new ResponseEntity<Object>(person, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)

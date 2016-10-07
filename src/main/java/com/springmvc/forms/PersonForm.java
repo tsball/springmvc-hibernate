@@ -1,13 +1,12 @@
 package com.springmvc.forms;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class PersonForm {
 
-	@NotNull
+	@NotEmpty
     @Size(min=5, max=16)
 	private String username;
 
