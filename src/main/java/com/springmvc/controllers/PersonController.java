@@ -28,7 +28,7 @@ import com.springmvc.services.ActivitiTaskService;
 import com.springmvc.utils.DateTimeUtil;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/people")
 public class PersonController {
 	
 	@Autowired PersonRepository personRepository;
@@ -36,7 +36,7 @@ public class PersonController {
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
-		ModelAndView mv = new ModelAndView("/person/index");
+		ModelAndView mv = new ModelAndView("/people/index");
 		
 		Iterable<Person> people = personRepository.findAll();
 		
@@ -46,7 +46,7 @@ public class PersonController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ModelAndView show(@PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/person/show");
+		ModelAndView mv = new ModelAndView("/people/show");
 		
 		Person person = personRepository.findOne(id);
 		
@@ -56,7 +56,7 @@ public class PersonController {
 	
 	@RequestMapping(value="/{id}/tasks", method= RequestMethod.GET)
     public ModelAndView tasks(@PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/person/tasks");
+		ModelAndView mv = new ModelAndView("/people/tasks");
 		
 		Person person = personRepository.findOne(id);
 		
@@ -73,7 +73,7 @@ public class PersonController {
 	
 	@RequestMapping(value="/{id}/leaves", method= RequestMethod.GET)
     public ModelAndView leaves(@PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/person/leaves");
+		ModelAndView mv = new ModelAndView("/people/leaves");
 		
 		Person person = personRepository.findOne(id);
 		
@@ -97,12 +97,12 @@ public class PersonController {
 		
 		redirectAttr.addFlashAttribute("notice", "Start task successed!");
 		
-		return new ModelAndView("redirect:/person/" + person.getId() + "/tasks");
+		return new ModelAndView("redirect:/people/" + person.getId() + "/tasks");
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("/person/add", "person", new Person());
+		ModelAndView mv = new ModelAndView("/people/add", "person", new Person());
 		
 		return mv;
 	}
@@ -126,7 +126,7 @@ public class PersonController {
 	
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public ModelAndView edit(HttpServletRequest request, @PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/person/edit");
+		ModelAndView mv = new ModelAndView("/people/edit");
 		
 		Person person = personRepository.findOne(id);
 		
@@ -162,7 +162,7 @@ public class PersonController {
 		
 		redirectAttr.addFlashAttribute("notice", "Delete success!");
 		
-		return new ModelAndView("redirect:/person");
+		return new ModelAndView("redirect:/people");
 	}
 	
 }

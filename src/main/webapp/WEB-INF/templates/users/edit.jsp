@@ -25,11 +25,10 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-
 <body>
-	<h1>Add User</h1>
-	<form:form method="POST" commandName="user" action="${pageContext.request.contextPath}/user/">
-		<!-- <form:errors path="*" cssClass="errorblock" element="div" /> -->
+	<h1>Edit User</h1>
+	<div>${alert}</div>
+	<form:form modelAttribute="user" action="${pageContext.request.contextPath}/users/${user.id}" method="PUT">
 		<spring:bind path="username">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="username" class="form-control" placeholder="Username"
@@ -37,22 +36,7 @@
                 <form:errors path="username"></form:errors>
             </div>
         </spring:bind>
-        
-		<spring:bind path="password">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
-                <form:errors path="password"></form:errors>
-            </div>
-        </spring:bind>
-        
-        <spring:bind path="passwordConfirm">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="password" path="passwordConfirm" class="form-control"
-                            placeholder="Confirm your password"></form:input>
-                <form:errors path="passwordConfirm"></form:errors>
-            </div>
-        </spring:bind>
-        
+
         <spring:bind path="roles">
           <div class="form-group ${status.error ? 'has-error' : ''}">
 			<form:select path="roles" items="${roles}" itemValue="id" itemLabel="name" multiple="true" />

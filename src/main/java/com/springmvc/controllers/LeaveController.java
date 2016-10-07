@@ -30,7 +30,7 @@ import com.springmvc.services.ActivitiTaskService;
 import com.springmvc.utils.DateTimeUtil;
 
 @RestController
-@RequestMapping("/leave")
+@RequestMapping("/leavess")
 public class LeaveController {
 	
 	@Autowired LeaveRepository leaveRepository;
@@ -41,7 +41,7 @@ public class LeaveController {
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
-		ModelAndView mv = new ModelAndView("/leave/index");
+		ModelAndView mv = new ModelAndView("/leaves/index");
 		
 		Iterable<Leave> leaves = leaveRepository.findAll();
 		
@@ -51,7 +51,7 @@ public class LeaveController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("/leave/add", "leave", new Leave());
+		ModelAndView mv = new ModelAndView("/leaves/add", "leave", new Leave());
 		
 		return mv;
 	}
@@ -61,7 +61,7 @@ public class LeaveController {
 		
 		if (result.hasErrors()) {
 			redirectAttr.addFlashAttribute("notice", result.getFieldErrors());
-			return new ModelAndView("/leave/add");
+			return new ModelAndView("/leaves/add");
 		}
 		
 		// save a leave
@@ -84,7 +84,7 @@ public class LeaveController {
 		
 		redirectAttr.addFlashAttribute("notice", "Created success!");
 		
-		return new ModelAndView("redirect:/leave");
+		return new ModelAndView("redirect:/leaves");
 	}
 	
 	@RequestMapping(value = "/{id}/agree", method = RequestMethod.PATCH)
@@ -102,7 +102,7 @@ public class LeaveController {
 		taskService.complete(task.getId(), variables);
 		
 		redirectAttr.addFlashAttribute("notice", "Update successed!");
-		return new ModelAndView("redirect:/leave");
+		return new ModelAndView("redirect:/leaves");
 	}
 	
 	@RequestMapping(value = "/{id}/reject", method = RequestMethod.PATCH)
@@ -120,7 +120,7 @@ public class LeaveController {
 		taskService.complete(task.getId(), variables);
 		
 		redirectAttr.addFlashAttribute("notice", "Update successed!");
-		return new ModelAndView("redirect:/leave");
+		return new ModelAndView("redirect:/leaves");
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
@@ -130,12 +130,12 @@ public class LeaveController {
 		
 		redirectAttr.addFlashAttribute("notice", "Delete success!");
 		
-		return new ModelAndView("redirect:/leave");
+		return new ModelAndView("redirect:/leaves");
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ModelAndView show(@PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/leave/show");
+		ModelAndView mv = new ModelAndView("/leaves/show");
 		
 		Leave leave = leaveRepository.findOne(id);
 		

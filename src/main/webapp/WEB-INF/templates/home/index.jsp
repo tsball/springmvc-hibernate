@@ -13,12 +13,12 @@
 <h1>管理平台页面（需登录）</h1>
 <p>
 	<ul>
-		<li><a href="${pageContext.request.contextPath}/user/">用户管理</a></li>
-		<li><a href="${pageContext.request.contextPath}/role/">角色管理</a></li>
-		<li><a href="${pageContext.request.contextPath}/authority/">权限管理</a></li>
+		<li><a href="${pageContext.request.contextPath}/users/">用户管理</a></li>
+		<li><a href="${pageContext.request.contextPath}/roles/">角色管理</a></li>
+		<li><a href="${pageContext.request.contextPath}/authorities/">权限管理</a></li>
 	</ul>
 	<ul>
-		<li><a href="${pageContext.request.contextPath}/person/">人员管理</a></li>
+		<li><a href="${pageContext.request.contextPath}/people/">人员管理</a></li>
 	</ul>
 </p>
 <p>

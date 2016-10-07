@@ -14,7 +14,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Create an account</title>
+    <title>Person Management</title>
 
     <link href="${contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/css/common.css" rel="stylesheet">
@@ -26,27 +26,55 @@
     <![endif]-->
 </head>
 <body>
-	<h1>Edit User</h1>
+	<h1>Edit Person</h1>
 	<div>${alert}</div>
-	<form:form modelAttribute="user" action="${pageContext.request.contextPath}/user/${user.id}" method="PUT">
-		<spring:bind path="username">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="username" class="form-control" placeholder="Username"
-                            autofocus="true"></form:input>
-                <form:errors path="username"></form:errors>
-            </div>
-        </spring:bind>
-
-        <spring:bind path="roles">
-          <div class="form-group ${status.error ? 'has-error' : ''}">
-			<form:select path="roles" items="${roles}" itemValue="id" itemLabel="name" multiple="true" />
-            <form:errors path="roles"></form:errors>
-          </div>
-        </spring:bind>
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+	<form:form modelAttribute="person" action="${pageContext.request.contextPath}/people/${person.id}" method="PUT">
+		<div>
+			<form:label path="username">Username</form:label>
+			<form:input path="username" />
+		</div>
+		<div>
+			<form:label path="firstName">First Name</form:label>
+			<form:input path="firstName" />
+		</div>
+		<div>
+			<form:label path="lastName">Last Name</form:label>
+			<form:input path="lastName" />
+		</div>
+		<div>
+			<button id="btn-submit" type="button">提交</button>
+		</div>
 	</form:form>
 	<!-- /container -->
 	<script type="text/javascript" src="${contextPath}/js/jquery-1.11.0.min.js" ></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery.form.min.js" ></script>
 	<script type="text/javascript" src="${contextPath}/js/bootstrap.min.js" ></script>
 </body>
+<script type="text/javascript">
+$(function(){
+	$('#btn-submit').click(function(){
+		var btnSubmitText = $(this).text();
+		
+		$("#person").ajaxSubmit({
+          beforeSubmit: function() {
+            // disabled the button
+            $('#btn-submit').prop('disabled', true);
+            $('#btn-submit').append("中...");
+          },
+          success: function (response) {
+        	  location.href = '/people/' + response.id;
+          },
+          error: function(xhr, status, error) {
+        	  //status: error
+        	  //error: Not Acceptable
+        	  alert(xhr.status);
+        	  
+              // re-enable the button
+              $('#btn-submit').prop('disabled', false);
+              $('#btn-submit').html(btnSubmitText);
+          }
+        });
+	});
+});
+</script>
 </html>

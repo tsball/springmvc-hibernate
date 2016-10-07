@@ -28,7 +28,7 @@
 
 <body>
 	<h1>Add Person</h1>
-	<form:form method="POST" commandName="person" action="${pageContext.request.contextPath}/person/">
+	<form:form method="POST" commandName="person" action="${pageContext.request.contextPath}/people/">
 		<form:errors path="*" cssClass="errorblock" element="div" />
 		<div>
 			<label>Username</label>
@@ -63,7 +63,7 @@ $(function(){
             $('#btn-submit').append("中...");
           },
           success: function (response) {
-        	  location.href = '/person';
+        	  location.href = '/people/' + response.id;
           },
           error: function(xhr, status, error) {
         	  //status: error

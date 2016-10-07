@@ -10,29 +10,23 @@
 
 </head>
 <body>
-<h1>Person Management</h1>
-	<a href="${pageContext.request.contextPath}/person/add">New Person</a>
+<h1>Person Tasks</h1>
+	<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/people/${person.id}/tasks" data-method="POST">Start A Task</a>
 	<div>${notice}</div>
 	<table border="1">
 		<thead>
 			<tr>
-				<th width="200">Username</th>
-				<th width="200">First Nmae</th>
-				<th width="200">Last Name</th>
+				<th width="200">Task Id</th>
+				<th width="200">Task Name</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${people}" var="obj">
+			<c:forEach items="${taskRepresentations}" var="obj">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/person/${obj.id}">${obj.username}</a></td>
-				<td>${obj.firstName}</td>
-				<td>${obj.lastName}</td>
+				<td>${obj.id}</td>
+				<td>${obj.name}</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/leave">View Leave</a>
-					<a href="${pageContext.request.contextPath}/person/${obj.id}/tasks">View Tasks</a>
-					<a href="${pageContext.request.contextPath}/person/${obj.id}/edit">Edit</a>
-					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/person/${obj.id}" data-method="DELETE">Delete</a>
 				</td>
 			</tr>
 			</c:forEach>
@@ -48,8 +42,7 @@ $(function(){
 		
 		var url = $(this).attr('data-href');
 		var http_verb = $(this).attr('data-method');
-		var csrf = '<input type="hidden" name="_csrf" value="${_csrf.token}"/>';
-		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" />'+ csrf +'</form>').submit();
+		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" /></form>').submit();
 	});
 });
 </script>

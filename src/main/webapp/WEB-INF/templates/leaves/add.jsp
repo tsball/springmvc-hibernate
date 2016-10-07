@@ -12,7 +12,7 @@
 </head>
 <body>
 	<h1>Leave Apply</h1>
-	<form:form method="POST" commandName="leave" action="${pageContext.request.contextPath}/leave/">
+	<form:form method="POST" commandName="leave" action="${pageContext.request.contextPath}/leaves/">
 		<form:errors path="*" cssClass="errorblock" element="div" />
 		<div>
 			<label>请假类型：</label>

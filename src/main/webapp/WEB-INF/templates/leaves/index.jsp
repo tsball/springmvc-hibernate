@@ -6,30 +6,32 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="_csrf" content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>User List</title>
+<title>Person List</title>
 
 </head>
 <body>
-<h1>Spring MVC + MyBatis + Base Mapper</h1>
-	<a href="${pageContext.request.contextPath}/user/add">新增用户</a>
-	<a href="${pageContext.request.contextPath}/user/save-fail-test">新增用户Lily(失败回滚)</a>
+<h1>Leave Management</h1>
+	<a href="${pageContext.request.contextPath}/leaves/add">Apply a leave</a>
 	<div>${notice}</div>
 	<table border="1">
 		<thead>
 			<tr>
-				<th width="200">User Name</th>
+				<th width="200">Leave Type</th>
+				<th>Reason</th>
+				<th width="200">Created At</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${userList}" var="obj">
+			<c:forEach items="${leaves}" var="obj">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/user/${obj.id}">${obj.username}</a></td>
+				<td><a href="${pageContext.request.contextPath}/leaves/${obj.id}">${obj.leaveType}</a></td>
+				<td>${obj.reason}</td>
+				<td>${obj.createdAt}</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/user/${obj.id}/edit">Edit</a>
-					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/user/${obj.id}" data-method="DELETE">Delete</a>
+					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leaves/${obj.id}/agree" data-method="PATCH">Agree</a>
+					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leaves/${obj.id}/reject" data-method="PATCH">Reject</a>
+					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leaves/${obj.id}" data-method="DELETE">Delete</a>
 				</td>
 			</tr>
 			</c:forEach>

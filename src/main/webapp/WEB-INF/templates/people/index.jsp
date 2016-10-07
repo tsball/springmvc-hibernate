@@ -10,28 +10,29 @@
 
 </head>
 <body>
-<h1>Leave Management</h1>
-	<a href="${pageContext.request.contextPath}/leave/add">Apply a leave</a>
+<h1>Person Management</h1>
+	<a href="${pageContext.request.contextPath}/people/add">New Person</a>
 	<div>${notice}</div>
 	<table border="1">
 		<thead>
 			<tr>
-				<th width="200">Leave Type</th>
-				<th>Reason</th>
-				<th width="200">Created At</th>
+				<th width="200">Username</th>
+				<th width="200">First Nmae</th>
+				<th width="200">Last Name</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${leaves}" var="obj">
+			<c:forEach items="${people}" var="obj">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/leave/${obj.id}">${obj.leaveType}</a></td>
-				<td>${obj.reason}</td>
-				<td>${obj.createdAt}</td>
+				<td><a href="${pageContext.request.contextPath}/people/${obj.id}">${obj.username}</a></td>
+				<td>${obj.firstName}</td>
+				<td>${obj.lastName}</td>
 				<td>
-					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leave/${obj.id}/agree" data-method="PATCH">Agree</a>
-					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leave/${obj.id}/reject" data-method="PATCH">Reject</a>
-					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leave/${obj.id}" data-method="DELETE">Delete</a>
+					<a href="${pageContext.request.contextPath}/leaves">View Leave</a>
+					<a href="${pageContext.request.contextPath}/people/${obj.id}/tasks">View Tasks</a>
+					<a href="${pageContext.request.contextPath}/people/${obj.id}/edit">Edit</a>
+					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/people/${obj.id}" data-method="DELETE">Delete</a>
 				</td>
 			</tr>
 			</c:forEach>
