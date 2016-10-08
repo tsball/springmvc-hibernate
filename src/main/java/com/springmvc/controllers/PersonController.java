@@ -120,7 +120,6 @@ public class PersonController {
 		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		personRepository.save(person);
 		
-		redirectAttr.addFlashAttribute("notice", "Create successed!");
 		return new ResponseEntity<Object>(person, HttpStatus.OK);
 	}
 	
@@ -151,7 +150,6 @@ public class PersonController {
 		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		personRepository.save(person);
 		
-		redirectAttr.addFlashAttribute("notice", "Update successed!");
 		return new ResponseEntity<Object>(person, HttpStatus.OK);
 	}
 	

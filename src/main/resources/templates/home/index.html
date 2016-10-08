@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>主页面</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">Home Console</h1>
+	
+	<div layout:fragment="content" class="container">
+		<p>
+			<ul>
+				<li><a th:href="@{/users/}">用户管理</a></li>
+				<li><a th:href="@{/roles/}">角色管理</a></li>
+				<li><a th:href="@{/authorities/}">权限管理</a></li>
+			</ul>
+			<ul>
+				<li><a th:href="@{/people/}">人员管理</a></li>
+			</ul>
+		</p>
+		<p>
+			<a th:href="@{/signout}">退出</a>
+		</p>
+	</div>
+</body>
+</html>
