@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,9 +44,9 @@ public class UserController {
 	public ModelAndView listAllUsers() {
 		ModelAndView mv = new ModelAndView("/users/index");
 		
-		Iterable<User> userList = userRepository.findAll(new Sort(Sort.Direction.ASC, "username"));
+		Iterable<User> users = userRepository.findAll(new Sort(Sort.Direction.ASC, "username"));
 		
-		mv.addObject("userList", userList);
+		mv.addObject("users", users);
 		return mv;
 	}
 	
@@ -72,7 +71,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ModelAndView create(HttpServletRequest request, @Valid @ModelAttribute("user") UserForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ModelAndView create(HttpServletRequest request, @Valid UserForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		userValidtor.validate(form, result);
 		
 		if (result.hasErrors()) {

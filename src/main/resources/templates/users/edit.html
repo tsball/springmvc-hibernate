@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>编辑用户</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">编辑用户</h1>
+	
+	<div layout:fragment="content" class="container">
+		<form th:method="PUT" th:action="@{/users/{id}(id=${user.id})}">
+			<div class="form-group">
+                <input type="text" name="username" th:value="${user.username}" class="form-control" placeholder="Username" autofocus="autofocus" />
+            </div>
+	        
+			<div class="form-group">
+				<select multiple="multiple" th:field="*{user.roles}" name="roles">
+   					<option th:each="obj : ${roles}" th:value="${{obj}}" th:text="${obj.name}" />
+                </select>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+		</form>
+	</div>
+</body>
+</html>

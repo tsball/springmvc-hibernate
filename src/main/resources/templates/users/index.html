@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>用户管理</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">用户管理</h1>
+	
+	<div layout:fragment="content" class="container">
+		<a th:href="@{/users/add}" class="btn btn-default">新增用户</a>
+		<a th:href="@{/users/save-fail-test}" class="btn btn-default">新增用户Lily(失败回滚)</a>
+		<div th:text="${notice}"></div>
+		<table border="1">
+			<thead>
+				<tr>
+					<th width="200">用户名</th>
+					<th width="200">身份</th>
+					<th>角色</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="obj : ${users}">
+					<td><a th:href="@{/users/{id}(id=${obj.id})}" th:text="${obj.username}"></a></td>
+					<td><a th:href="@{/users/{id}(id=${obj.id})}" th:text="${obj.username}"></a></td>
+					<td><span th:text="${#strings.listJoin(obj.roles,',')}" th:remove="tag"></span></td>
+					<td>
+						<a th:href="@{/users/{id}/edit(id=${obj.id})}">Edit</a>
+						<a href="javascript:void(0);" th:attr="data-href=@{/users/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

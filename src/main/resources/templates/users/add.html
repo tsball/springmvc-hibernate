@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>新增用户</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">新增用户</h1>
+	
+	<div layout:fragment="content" class="container">
+		<form method="POST" th:action="@{/users/}">
+			<div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="Username" autofocus="autofocus" />
+            </div>
+	        
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Password" />
+            </div>
+	        
+            <div class="form-group">
+                <input type="password" name="passwordConfirm" class="form-control" placeholder="Confirm your password" />
+            </div>
+	        
+			<div class="form-group">
+				<select multiple="multiple" name="roles">
+   					<option th:each="obj : ${roles}" th:value="${obj.id}" th:text="${obj.name}" />
+                </select>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+		</form>
+	</div>
+</body>
+</html>

@@ -13,5 +13,18 @@
 
 <script type="text/javascript" th:src="@{/js/jquery-1.11.0.min.js}" ></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="" ></script>
+<script type="text/javascript">
+$(function(){
+	// Restful Delete
+	$('a[data-method]').click(function(event){
+		event.preventDefault();
+		
+		var url = $(this).attr('data-href');
+		var http_verb = $(this).attr('data-method');
+		var csrf = '<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>';
+		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" />'+ csrf +'</form>').submit();
+	});
+});
+</script>
 </body>
 </html>
