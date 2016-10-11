@@ -14,6 +14,9 @@ public class UserEditForm {
 	protected String username;
 	
 	@NotNull
+	protected Long person;
+	
+	@NotNull
 	protected Set<Long> roles;
 
 	public String getUsername() {
@@ -22,6 +25,14 @@ public class UserEditForm {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public Long getPerson() {
+		return person;
+	}
+
+	public void setPerson(Long person) {
+		this.person = person;
 	}
 
 	public Set<Long> getRoles() {

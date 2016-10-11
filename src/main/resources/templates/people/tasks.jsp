@@ -6,30 +6,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="_csrf" content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>User List</title>
+<title>Person List</title>
 
 </head>
 <body>
-<h1>Spring MVC + MyBatis + Base Mapper</h1>
-	<a href="${pageContext.request.contextPath}/users/add">新增用户</a>
-	<a href="${pageContext.request.contextPath}/users/save-fail-test">新增用户Lily(失败回滚)</a>
+<h1>Person Tasks</h1>
+	<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/people/${person.id}/tasks" data-method="POST">Start A Task</a>
 	<div>${notice}</div>
 	<table border="1">
 		<thead>
 			<tr>
-				<th width="200">User Name</th>
+				<th width="200">Task Id</th>
+				<th width="200">Task Name</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${userList}" var="obj">
+			<c:forEach items="${taskRepresentations}" var="obj">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/users/${obj.id}">${obj.username}</a></td>
+				<td>${obj.id}</td>
+				<td>${obj.name}</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/users/${obj.id}/edit">Edit</a>
-					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/users/${obj.id}" data-method="DELETE">Delete</a>
 				</td>
 			</tr>
 			</c:forEach>
@@ -45,8 +42,7 @@ $(function(){
 		
 		var url = $(this).attr('data-href');
 		var http_verb = $(this).attr('data-method');
-		var csrf = '<input type="hidden" name="_csrf" value="${_csrf.token}"/>';
-		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" />'+ csrf +'</form>').submit();
+		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" /></form>').submit();
 	});
 });
 </script>

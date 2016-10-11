@@ -1,11 +1,14 @@
 package com.springmvc.models;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -18,12 +21,15 @@ public class Person {
     private Long id;
 
     private String username;
+    
+    @Column(nullable = false)
+    private String name;
 
-    private String firstName;
-
-    private String lastName;
-
-    private Date birthDate;
+    @Column(nullable = false, unique = true)
+    private String code;
+    
+    @OneToMany
+    private Set<User> users = new HashSet<User>(0);
     
     @NotNull
 	private Timestamp createdAt;
@@ -31,55 +37,37 @@ public class Person {
 	@NotNull
 	private Timestamp updatedAt;
 
-    public Person() {
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Person(String username, String firstName, String lastName, Date birthDate) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public Timestamp getCreatedAt() {
 		return createdAt;
@@ -96,6 +84,13 @@ public class Person {
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-    
+
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
     
 }

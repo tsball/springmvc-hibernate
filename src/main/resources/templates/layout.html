@@ -10,9 +10,11 @@
 <body>
 <h1 layout:fragment="header">Layout</h1>
 <div layout:fragment="content">Fake content</div>
-
+</body>
 <script type="text/javascript" th:src="@{/js/jquery-1.11.0.min.js}" ></script>
-<script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="" ></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}" ></script>
+<script type="text/javascript" th:src="@{/js/jquery-validate/jquery.validate.js}" ></script>
+<script type="text/javascript" th:src="@{/js/jquery.form.min.js}" ></script>
 <script type="text/javascript">
 $(function(){
 	// Restful Delete
@@ -26,5 +28,5 @@ $(function(){
 	});
 });
 </script>
-</body>
+<th:block layout:fragment="javascript_block"></th:block>
 </html>

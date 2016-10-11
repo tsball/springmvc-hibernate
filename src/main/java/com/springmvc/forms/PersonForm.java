@@ -8,36 +8,24 @@ public class PersonForm {
 
 	@NotEmpty
     @Size(min=5, max=16)
-	private String username;
+	private String name;
 
 	@NotEmpty
-	private String firstName;
-	
-	@NotEmpty
-	private String lastName;
+	private String code;
 
-	public String getUsername() {
-		return username;
+	public String getName() {
+		return name;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getCode() {
+		return code;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setCode(String code) {
+		this.code = code;
 	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
 }

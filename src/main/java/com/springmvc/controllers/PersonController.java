@@ -9,10 +9,13 @@ import javax.validation.Valid;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,9 +41,10 @@ public class PersonController {
 	public ModelAndView listAllUsers() {
 		ModelAndView mv = new ModelAndView("/people/index");
 		
-		Iterable<Person> people = personRepository.findAll();
+		Pageable pageable = new PageRequest(0, 10, Sort.Direction.ASC, "name");
+		Page<Person> page = personRepository.findList(pageable);
 		
-		mv.addObject("people", people);
+		mv.addObject("page", page);		
 		return mv;
 	}
 	
@@ -108,7 +112,7 @@ public class PersonController {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ResponseEntity<Object> create(HttpServletRequest request, @Valid @ModelAttribute("person") PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ResponseEntity<Object> create(HttpServletRequest request, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
 			return new ResponseEntity<Object>(result.getFieldErrors(), HttpStatus.NOT_ACCEPTABLE);

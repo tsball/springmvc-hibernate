@@ -10,16 +10,18 @@
 
 </head>
 <body>
-	<h1>User</h1>
+	<h1>Person</h1>
 	<div>
-		<label>姓名</label>
-		${user.username}
+		<label>Username</label>
+		${person.username}
 	</div>
 	<div>
-		<label>角色</label>
-		<c:forEach items="${user.roles}" var="obj">
-			${obj.name}
-		</c:forEach>
+		<label>First Name</label>
+		${person.firstName}
+	</div>
+	<div>
+		<label>Last Name</label>
+		${person.lastName}
 	</div>
 </body>
 </html>

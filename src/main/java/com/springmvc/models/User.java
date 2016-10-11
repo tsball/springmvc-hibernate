@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -39,18 +40,25 @@ public class User implements UserDetails {
 	//@Transient
 	//private String passwordConfirm;
 	
-	@Column(nullable = false)
-	private Timestamp createdAt;
-	
-	@Column(nullable = false)
-	private Timestamp updatedAt;
-	
-	@ManyToMany
+	@ManyToMany//(fetch=FetchType.EAGER)
     //@JoinTable(name="users_roles",
     //    joinColumns = @JoinColumn(name="user_id", referencedColumnName="id"),
     //    inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<Role>(0); 
+	private Set<Role> roles = new HashSet<Role>(0);
+	
+	@ManyToOne
+	//@Fetch(FetchMode.JOIN)
+	@JoinColumn(name="person_id")
+	private Person person;
+	
+	@Column(nullable = false)
+	//@Temporal(TemporalType.TIMESTAMP)
+	private Timestamp createdAt;
+	
+	@Column(nullable = false)
+	//@Temporal(TemporalType.TIMESTAMP)
+	private Timestamp updatedAt;
 
 	public long getId() {
 		return id;
@@ -107,6 +115,14 @@ public class User implements UserDetails {
 			authorities.add(new SimpleGrantedAuthority(role.getCode().toString()));
 		}
 	    return authorities;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	@Override

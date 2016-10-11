@@ -15,6 +15,10 @@
 			<th:block th:text="${user.username}" />
 		</div>
 		<div>
+			<label>身份</label>
+			<th:block th:text="${user.person.name}" />
+		</div>
+		<div>
 			<label>角色</label>
 			<ul><li th:each="obj : ${user.roles}" th:text="${obj.name}"></li></ul>
 		</div>
