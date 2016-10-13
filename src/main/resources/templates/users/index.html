@@ -11,7 +11,6 @@
 	
 	<div layout:fragment="content" class="container">
 		<a th:href="@{/users/add}" class="btn btn-default">新增用户</a>
-		<a th:href="@{/users/save-fail-test}" class="btn btn-default">新增用户Lily(失败回滚)</a>
 		<div th:text="${notice}"></div>
 		<table border="1">
 			<thead>
@@ -34,6 +33,32 @@
 				</tr>
 			</tbody>
 		</table>
+		<ul class="pagination" id="pagination"></ul>
 	</div>
 </body>
+<script th:inline="javascript" type="text/javascript" layout:fragment="javascript_block">
+/*<![CDATA[*/
+/*[+
+var currentPage  = [[${param.page == null? 1:param.page[0]}]];
+currentPage = parseInt(currentPage);
+
+var totalPage = [[${page.getTotalPages()}]];
+ +]*/
+
+
+$(function () {
+    window.pagObj = $('#pagination').twbsPagination({
+        totalPages: totalPage,
+        visiblePages: 10,
+        startPage: currentPage,
+        onPageClick: function (event, page) {
+        	if (page != currentPage) {
+            	location.href = '/users?page=' + page;
+        	}
+        }
+    });
+});
+    
+/*]]>*/
+</script>
 </html>

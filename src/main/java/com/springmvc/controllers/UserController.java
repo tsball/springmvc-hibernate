@@ -51,10 +51,14 @@ public class UserController {
 	@Autowired EntityManager entityManager;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView listAllUsers() {
+	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("/users/index");
 		
-		Pageable pageable = new PageRequest(0, 10, Sort.Direction.ASC, "username");
+		// page number
+		String pageNumStr = request.getParameter("page");
+		int pageNum = pageNumStr == null? 0 : Integer.parseInt(pageNumStr) - 1;
+		
+		Pageable pageable = new PageRequest(pageNum, 5, Sort.Direction.ASC, "username");
 		Page<User> page = userRepository.findList(pageable);
 		
 		//List<User> page = entityManager.createQuery("SELECT u, u.person FROM User u JOIN fetch u.person").getResultList();
