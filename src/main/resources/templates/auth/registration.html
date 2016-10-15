@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="layout">
+<head>
+    <title>Log in with your account</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="container">
+	    <form method="POST" th:action="@{/auth/registration}" class="form-validation">
+			<div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="Username" autofocus="autofocus" />
+            </div>
+	        
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Password" />
+            </div>
+	        
+            <div class="form-group">
+                <input type="password" name="passwordConfirm" class="form-control" placeholder="Confirm your password" />
+            </div>
+            
+            <div class="form-group">
+				<select name="person">
+   					<option th:each="obj : ${people}" th:value="${obj.id}" th:text="${obj.name}" />
+                </select>
+			</div>
+	        
+			<div class="form-group">
+				<select multiple="multiple" name="roles">
+   					<option th:each="obj : ${roles}" th:value="${obj.id}" th:text="${obj.name}" />
+                </select>
+			</div>
+			<button id="btn-submit" class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+		</form>
+	</div>
+<!-- /container -->
+<script type="text/javascript" th:src="@{/js/jquery-1.11.0.min.js}" ></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="" ></script>
+<!-- form -->
+<script type="text/javascript" th:src="@{/js/jquery-validate/jquery.validate.js}" ></script>
+<script type="text/javascript" th:src="@{/js/jquery.form.min.js}" ></script>
+<script type="text/javascript">
+$(function(){
+	// validate signup form on keyup and submit
+	$(".form-validation").validate({
+		success: "valid",
+        submitHandler: function(form) {
+        	return formSubmitHandler(form);
+        },
+		rules: {
+			username: {
+				required: true,
+				minlength: 2
+			},
+			person: {
+				required: true
+			},
+			password: {
+				required: true,
+				minlength: 5
+			},
+			passwordConfirm: {
+				required: true,
+				minlength: 5,
+				equalTo: "input[name='password']"
+			},
+			roles: {
+				required: true
+			}
+		},
+		messages: {
+			username: {
+				required: "Please enter a username",
+				minlength: "Your username must consist of at least 2 characters"
+			},
+			person: {
+				required: "Please select a person"
+			},
+			password: {
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long"
+			},
+			passwordConfirm: {
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long",
+				equalTo: "Please enter the same password as above"
+			},
+			roles: {
+				required: "Please select a role"
+			}
+		}
+	});
+});
+
+function formSubmitHandler(form) {
+    var btnSubmitText = $('#btn-submit').html();
+
+    $(".form-validation").ajaxSubmit({
+      beforeSubmit: function() {
+        // disabled the button
+        $('#btn-submit').prop('disabled', true);
+        $('#btn-submit').append("жа...");
+      },
+      success: function (response) {
+    	  location.href = "/users/" + response;
+      },
+      error: function(xhr, status, error) {
+    	  //status: error
+    	  //error: Not Acceptable
+    	  //xhr.status: 401
+    	  
+          // re-enable the button
+          $('#btn-submit').prop('disabled', false);
+          $('#btn-submit').html(btnSubmitText);
+      }
+    });
+    return false;
+}
+</script>
+</body>
+</html>

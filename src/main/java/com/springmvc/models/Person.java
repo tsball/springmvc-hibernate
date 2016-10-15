@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -28,7 +29,8 @@ public class Person {
     @Column(nullable = false, unique = true)
     private String code;
     
-    @OneToMany
+    @OneToMany(mappedBy="person", orphanRemoval=true)
+    @OrderBy("username ASC")
     private Set<User> users = new HashSet<User>(0);
     
     @NotNull

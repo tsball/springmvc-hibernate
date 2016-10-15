@@ -112,10 +112,10 @@ public class PersonController {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ResponseEntity<Object> create(HttpServletRequest request, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ResponseEntity<?> create(HttpServletRequest request, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result.getFieldErrors(), HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
 		
 		Person person = new Person();
@@ -124,7 +124,7 @@ public class PersonController {
 		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		personRepository.save(person);
 		
-		return new ResponseEntity<Object>(person, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.CREATED).body(person.getId());
 	}
 	
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
@@ -138,23 +138,23 @@ public class PersonController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Object> update(@PathVariable("id") Long id, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
-			return new ResponseEntity<Object>(result.getFieldErrors(), HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
 		
 		Person person = personRepository.findOne(id);
 		
 		if (person == null) {
-			return new ResponseEntity<Object>("Person can not found with id: " + id, HttpStatus.NOT_FOUND);
+			return ResponseEntity.status(HttpStatus.NOT_EXTENDED).body("Person can not found with id: " + id);
 		}
 		
 		BeanUtils.copyProperties(form, person);
 		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		personRepository.save(person);
 		
-		return new ResponseEntity<Object>(person, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(person.getId());
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)

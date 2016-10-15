@@ -142,7 +142,7 @@ public class UserController {
 		user.setPerson(personRepository.findOne(form.getPerson()));
 		userRepository.save(user);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(user.getId());
+		return ResponseEntity.status(HttpStatus.OK).body(user.getId());
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
