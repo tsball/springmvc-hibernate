@@ -36,6 +36,9 @@ public class Role {
 	
 	@ManyToMany(mappedBy="roles")
 	private Set<User> users = new HashSet<User>(0);
+	
+	@ManyToMany(mappedBy="roles")
+	private Set<Authority> authorities = new HashSet<Authority>(0);
 
 	public long getId() {
 		return id;
