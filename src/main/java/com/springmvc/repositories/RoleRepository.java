@@ -18,4 +18,6 @@ import com.springmvc.models.Role;
 @Transactional
 public interface RoleRepository extends JpaRepository<Role, Long> {
 	
+	public Role findByName(String name);
+	
 }

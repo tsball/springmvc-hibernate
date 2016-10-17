@@ -25,7 +25,7 @@ public class Role {
 	private String name;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private RoleCode code;
 
 	@Column(nullable = false)

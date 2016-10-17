@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>角色详情</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">角色详情</h1>
+	<div layout:fragment="breadcrumb">
+		<a href="/">首页</a>
+		>
+		<a href="/roles">角色管理</a>
+		>
+		角色详情
+	</div>
+	<div layout:fragment="content" class="container">
+		<div>
+			<label>角色名</label>
+			<th:block th:text="${role.name}" />
+		</div>
+		<div>
+			<label>身份</label>
+			<th:block th:text="${role.code}" />
+		</div>
+
+		<div><a href="/roles">返回</a></div>
+	</div>
+	
+</body>
+</html>
