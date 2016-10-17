@@ -11,6 +11,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -37,7 +39,8 @@ public class Role {
 	@ManyToMany(mappedBy="roles")
 	private Set<User> users = new HashSet<User>(0);
 	
-	@ManyToMany(mappedBy="roles")
+	@ManyToMany // support to save the role.authorities in this side with the join table message
+	@JoinTable(name = "roles_authorities", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private Set<Authority> authorities = new HashSet<Authority>(0);
 
 	public long getId() {
@@ -86,6 +89,14 @@ public class Role {
 
 	public void setCode(RoleCode code) {
 		this.code = code;
+	}
+
+	public Set<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Set<Authority> authorities) {
+		this.authorities = authorities;
 	}
 	
 }

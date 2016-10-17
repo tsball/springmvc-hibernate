@@ -9,8 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -34,8 +32,7 @@ public class Authority {
 	@OneToMany(mappedBy="authority", orphanRemoval=true)
     private Set<Resource> resources = new HashSet<Resource>(0);
 	
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name = "roles_authorities", joinColumns = @JoinColumn(name = "authority_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@ManyToMany(mappedBy="authorities", fetch=FetchType.EAGER)
 	private Set<Role> roles = new HashSet<Role>(0);
 
 	public long getId() {

@@ -57,13 +57,11 @@
   
   <dependencies>
 		<!-- hot startup -->
-		<!-- 
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-         -->
 	
 		<!-- begin for tomcat application server  -->
         <dependency>

@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.common.collect.Sets;
 import com.springmvc.forms.RoleForm;
+import com.springmvc.models.Authority;
 import com.springmvc.models.Role;
 import com.springmvc.models.RoleCode;
+import com.springmvc.repositories.AuthorityRepository;
 import com.springmvc.repositories.RoleRepository;
 import com.springmvc.utils.DateTimeUtil;
 import com.springmvc.validators.RoleValidator;
@@ -32,6 +35,7 @@ import com.springmvc.validators.RoleValidator;
 public class RoleController {
 	
 	@Autowired RoleRepository roleRepository;
+	@Autowired AuthorityRepository authorityRepository;
 	@Autowired RoleValidator roleValidtor;
 	@Autowired EntityManager entityManager;
 	
@@ -65,8 +69,10 @@ public class RoleController {
 		ModelAndView mv = new ModelAndView("/roles/add");
 		
 		RoleCode[] roleCodes = RoleCode.values();
+		Iterable<Authority> authorities = authorityRepository.findAll();
 		
 		mv.addObject("roleCodes", roleCodes);
+		mv.addObject("authorities", authorities);
 		return mv;
 	}
 	
@@ -78,10 +84,13 @@ public class RoleController {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
 		
+		Iterable<Authority> authorities = authorityRepository.findAll(form.getAuthorities());
+		
 		Role role = new Role();
 		BeanUtils.copyProperties(form, role);
 		role.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		role.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		role.setAuthorities(Sets.newHashSet(authorities));
 		roleRepository.save(role);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(role.getId());
@@ -93,9 +102,11 @@ public class RoleController {
 		
 		Role role = roleRepository.findOne(id);
 		RoleCode[] roleCodes = RoleCode.values();
+		Iterable<Authority> authorities = authorityRepository.findAll();
 		
 		mv.addObject("roleCodes", roleCodes);
 		mv.addObject("role", role);
+		mv.addObject("authorities", authorities);
 		return mv;
 	}
 	
@@ -106,9 +117,12 @@ public class RoleController {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
 		
+		Iterable<Authority> authorities = authorityRepository.findAll(form.getAuthorities());
+		
 		Role role = roleRepository.findOne(id);
 		BeanUtils.copyProperties(form, role);
 		role.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		role.setAuthorities(Sets.newHashSet(authorities));
 		roleRepository.save(role);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(role.getId());

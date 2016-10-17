@@ -24,7 +24,10 @@
 			<label>身份</label>
 			<th:block th:text="${role.code}" />
 		</div>
-
+		<div>
+			<label>权限</label>
+			<ul><li th:each="obj : ${role.authorities}" th:text="${obj.name}"></li></ul>
+		</div>
 		<div><a href="/roles">返回</a></div>
 	</div>
 	
