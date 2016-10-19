@@ -9,8 +9,6 @@ import com.springmvc.models.Person;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
 	
-	Person findByUsername(String username);
-
 	@Query("SELECT p FROM Person p")
 	Page<Person> findList(Pageable pageable);
 	

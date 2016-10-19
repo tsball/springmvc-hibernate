@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>日志详情</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">日志详情</h1>
+	<div layout:fragment="breadcrumb">
+		<a href="/">首页</a>
+		>
+		<a href="/operation_logs">日志管理</a>
+		>
+		日志详情
+	</div>
+	<div layout:fragment="content" class="container">
+		<div>
+			<label>内容</label>
+			<th:block th:text="${operationLog.message}" />
+		</div>
+		<div>
+			<label>风险级别</label>
+			<th:block th:text="${operationLog.riskLevel}" />
+		</div>
+		<div>
+			<label>事件</label>
+			<th:block th:text="${operationLog.event}" />
+		</div>
+		<div>
+			<label>分组</label>
+			<th:block th:text="${operationLog.group}" />
+		</div>
+		<div>
+			<label>操作人</label>
+			<th:block th:text="${operationLog.user.username}" />
+		</div>
+		<div>
+			<label>记录时间</label>
+			<th:block th:text="${operationLog.createdAt}" />
+		</div>
+		<div><a href="/operation_logs">返回</a></div>
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>日志管理</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">日志管理</h1>
+	<div layout:fragment="breadcrumb">
+		<a href="/">首页</a>
+		>
+		日志管理
+	</div>
+	<div layout:fragment="content" class="container">
+		<div th:text="${notice}"></div>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>内容</th>
+					<th>风险级别</th>
+					<th>事件</th>
+					<th>分组</th>
+					<th>记录时间</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="obj : ${page}">
+					<td><a th:href="@{/operation_logs/{id}(id=${obj.id})}" th:text="${obj.message}"></a></td>
+					<td th:text="${obj.riskLevel}"></td>
+					<td th:text="${obj.event}"></td>
+					<td th:text="${obj.group}"></td>
+					<td th:text="${obj.createdAt}"></td>
+					<td>
+						<a href="javascript:void(0);" th:attr="data-href=@{/operation_logs/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
