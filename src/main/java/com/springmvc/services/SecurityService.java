@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import com.springmvc.models.User;
+
 @Service
 public class SecurityService implements ISecurityService {
 	
@@ -25,10 +27,12 @@ public class SecurityService implements ISecurityService {
      * provide the api for fetching the username or other informations
      */
     @Override
-    public String findLoggedInName() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (userDetails instanceof UserDetails) {
-            return ((UserDetails)userDetails).getUsername();
+    public User findLoggedInUser() {
+    	Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDetails instanceof User) {
+            return ((User) userDetails);
+        } else if (userDetails instanceof String ) {
+        	// anonymousUser
         }
 
         return null;

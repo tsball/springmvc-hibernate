@@ -13,7 +13,6 @@ import org.activiti.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,12 +24,14 @@ import com.google.common.collect.Maps;
 import com.springmvc.constants.FlowVariableConst;
 import com.springmvc.forms.LeaveForm;
 import com.springmvc.models.Leave;
+import com.springmvc.models.LeaveType;
 import com.springmvc.repositories.LeaveRepository;
 import com.springmvc.services.ActivitiTaskService;
+import com.springmvc.services.ISecurityService;
 import com.springmvc.utils.DateTimeUtil;
 
 @RestController
-@RequestMapping("/leavess")
+@RequestMapping("/leaves")
 public class LeaveController {
 	
 	@Autowired LeaveRepository leaveRepository;
@@ -38,6 +39,7 @@ public class LeaveController {
 	@Autowired IdentityService identityService;
 	@Autowired RuntimeService runtimeService;
 	@Autowired TaskService taskService;
+	@Autowired ISecurityService securityService;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
@@ -51,13 +53,16 @@ public class LeaveController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("/leaves/add", "leave", new Leave());
+		ModelAndView mv = new ModelAndView("/leaves/add");
 		
+		LeaveType[] leaveTypes = LeaveType.values();
+		
+		mv.addObject("leaveTypes", leaveTypes);
 		return mv;
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ModelAndView create(HttpServletRequest request, @Valid @ModelAttribute("leave") LeaveForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ModelAndView create(HttpServletRequest request, @Valid LeaveForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
 			redirectAttr.addFlashAttribute("notice", result.getFieldErrors());
@@ -69,6 +74,7 @@ public class LeaveController {
 		BeanUtils.copyProperties(form, leave);
 		leave.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		leave.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		leave.setPersonId(securityService.findLoggedInUser().getId());
 		leaveRepository.save(leave);
 		
 		//用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中

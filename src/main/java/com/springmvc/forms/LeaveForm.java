@@ -1,45 +1,63 @@
 package com.springmvc.forms;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.springmvc.models.LeaveType;
 
 public class LeaveForm {
 
 	@NotNull
-	private String beginTime;
+	private LeaveType leaveType;
 	
 	@NotNull
-	private String endTime;
-
+	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm")
+	private Date beginAt;
+	
 	@NotNull
-	private Integer leaveType;
+	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm")
+	private Date endAt;
+	
+	@NotNull
+	private Integer days;
 	
 	@NotEmpty
 	private String reason;
 
-	public String getBeginTime() {
-		return beginTime;
-	}
-
-	public void setBeginTime(String beginTime) {
-		this.beginTime = beginTime;
-	}
-
-	public String getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-
-	public Integer getLeaveType() {
+	public LeaveType getLeaveType() {
 		return leaveType;
 	}
 
-	public void setLeaveType(Integer leaveType) {
+	public void setLeaveType(LeaveType leaveType) {
 		this.leaveType = leaveType;
+	}
+
+	public Date getBeginAt() {
+		return beginAt;
+	}
+
+	public void setBeginAt(Date beginAt) {
+		this.beginAt = beginAt;
+	}
+
+	public Date getEndAt() {
+		return endAt;
+	}
+
+	public void setEndAt(Date endAt) {
+		this.endAt = endAt;
+	}
+
+	public Integer getDays() {
+		return days;
+	}
+
+	public void setDays(Integer days) {
+		this.days = days;
 	}
 
 	public String getReason() {
@@ -49,4 +67,6 @@ public class LeaveForm {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+	
+	
 }

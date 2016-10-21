@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>申请请假</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">申请请假</h1>
+	
+	<div layout:fragment="content" class="container">
+		<form method="POST" th:action="@{/leaves/}" class="form-validation">
+			<div class="form-group">
+				<select name="leaveType">
+   					<option th:each="obj : ${leaveTypes}" th:value="${obj}" th:text="${obj}" />
+                </select>
+			</div>
+			<div class="form-group">
+                <input type="text" name="beginAt" class="form-control" placeholder="开始时间" autofocus="autofocus" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="endAt" class="form-control" placeholder="结束时间" />
+            </div>
+	        <div class="form-group">
+                <input type="text" name="days" class="form-control" placeholder="总天数" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="reason" class="form-control" placeholder="请假原因" />
+            </div>
+			<button id="btn-submit" class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" layout:fragment="javascript_block">
+$(function(){
+	// validate signup form on keyup and submit
+	$(".form-validation").validate({
+		success: "valid",
+        submitHandler: function(form) {
+        	return formSubmitHandler(form);
+        },
+		rules: {
+			reason: {
+				required: true,
+				minlength: 2
+			},
+			days: {
+				required: true
+			}
+		},
+		messages: {
+			reason: {
+				required: "Please enter reason",
+				minlength: "Your name must consist of at least 2 characters"
+			},
+			days: {
+				required: "Please enter days"
+			}
+		}
+	});
+});
+
+function formSubmitHandler(form) {
+    var btnSubmitText = $('#btn-submit').html();
+
+    $(".form-validation").ajaxSubmit({
+      beforeSubmit: function() {
+        // disabled the button
+        $('#btn-submit').prop('disabled', true);
+        $('#btn-submit').append("中...");
+      },
+      success: function (response) {
+    	  location.href = "/leaves/" + response;
+      },
+      error: function(xhr, status, error) {
+    	  //status: error
+    	  //error: Not Acceptable
+    	  //xhr.status: 401
+    	  
+          // re-enable the button
+          $('#btn-submit').prop('disabled', false);
+          $('#btn-submit').html(btnSubmitText);
+      }
+    });
+    return false;
+}
+</script>
+</html>

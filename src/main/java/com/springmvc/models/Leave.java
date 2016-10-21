@@ -3,7 +3,10 @@ package com.springmvc.models;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -17,16 +20,25 @@ public class Leave {
     @GeneratedValue
     private Long id;
     
-    private Integer leaveType;
+    @Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+    private LeaveType leaveType;
 
-    private Date beginTime;
+    @Column(nullable = false)
+    private Date beginAt;
 
-    private Date endTime;
+    @Column(nullable = false)
+    private Date endAt;
+    
+    @Column(nullable = false)
+    private Integer days;
 
     private String reason;
     
+    @Column(nullable = false)
     private Long personId;
     
+    @Column(nullable = false)
     private String processInstanceId; 
     
     @NotNull
@@ -43,28 +55,36 @@ public class Leave {
 		this.id = id;
 	}
 
-	public Integer getLeaveType() {
+	public LeaveType getLeaveType() {
 		return leaveType;
 	}
 
-	public void setLeaveType(Integer leaveType) {
+	public void setLeaveType(LeaveType leaveType) {
 		this.leaveType = leaveType;
 	}
 
-	public Date getBeginTime() {
-		return beginTime;
+	public Date getBeginAt() {
+		return beginAt;
 	}
 
-	public void setBeginTime(Date beginTime) {
-		this.beginTime = beginTime;
+	public void setBeginAt(Date beginAt) {
+		this.beginAt = beginAt;
 	}
 
-	public Date getEndTime() {
-		return endTime;
+	public Date getEndAt() {
+		return endAt;
 	}
 
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public void setEndAt(Date endAt) {
+		this.endAt = endAt;
+	}
+
+	public Integer getDays() {
+		return days;
+	}
+
+	public void setDays(Integer days) {
+		this.days = days;
 	}
 
 	public String getReason() {
@@ -73,22 +93,6 @@ public class Leave {
 
 	public void setReason(String reason) {
 		this.reason = reason;
-	}
-
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Timestamp updatedAt) {
-		this.updatedAt = updatedAt;
 	}
 
 	public Long getPersonId() {
@@ -107,5 +111,20 @@ public class Leave {
 		this.processInstanceId = processInstanceId;
 	}
 
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 	
 }

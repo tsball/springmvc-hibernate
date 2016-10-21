@@ -1,8 +1,10 @@
 package com.springmvc.services;
 
+import com.springmvc.models.User;
+
 public interface ISecurityService {
 
-	String findLoggedInName();
+	User findLoggedInUser();
 	
 	void autologin(String name, String password);
 	

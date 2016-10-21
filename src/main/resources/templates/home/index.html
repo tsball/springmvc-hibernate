@@ -12,6 +12,12 @@
 	<div layout:fragment="content" class="container">
 		<p>
 			<ul>
+				<li><a th:href="@{/leaves/add}">申请请假</a></li>
+				<li><a th:href="@{/leaves/pending}">待审核的请假</a></li>
+				<li><a th:href="@{/leaves/processing}">审核中的请假</a></li>
+				<li><a th:href="@{/leaves/approval}">已审核的请假</a></li>
+			</ul>
+			<ul>
 				<li><a th:href="@{/users/}">用户管理</a></li>
 				<li><a th:href="@{/roles/}">角色管理</a></li>
 				<li><a th:href="@{/authorities/}">权限管理</a></li>

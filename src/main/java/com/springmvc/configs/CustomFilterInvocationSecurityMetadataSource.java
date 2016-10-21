@@ -32,7 +32,7 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 		FilterInvocation fi = (FilterInvocation) object;
 	    String requestUrl = fi.getRequestUrl();
-	    String httpMethod = fi.getRequest().getMethod();
+	    String httpMethod = fi.getRequest().getMethod(); // GET/POST/PUT/PATCH/DELETE
 	    
 	    // css, js, login等等特殊页面，虽然是允许不登录访问的，但是只是影响AccessDecisionManager最终通过
 	 	if (requestUrl.startsWith("/css/") 
@@ -79,6 +79,8 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
 	    }
 	    
 		// RoleVoter will allow non ROLE_ANONYMOUS user access the url if the list size is zero or it is null.
+		//ConfigAttribute configAttr = new SecurityConfig("ROLE_HR"); // WebExpressionConfigAttribute
+        //configAttrCollection.add(configAttr);
 		return configAttrCollection;
 	}
 
