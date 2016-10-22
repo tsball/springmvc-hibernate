@@ -15,11 +15,11 @@ public class LeaveForm {
 	private LeaveType leaveType;
 	
 	@NotNull
-	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm")
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date beginAt;
 	
 	@NotNull
-	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm")
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date endAt;
 	
 	@NotNull

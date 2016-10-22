@@ -31,11 +31,20 @@ public class Person {
     @OrderBy("username ASC")
     private Set<User> users = new HashSet<User>(0);
     
+    @OneToMany(mappedBy="person", orphanRemoval=true)
+    private Set<Leave> leaves = new HashSet<Leave>(0);
+    
     @NotNull
 	private Timestamp createdAt;
 
 	@NotNull
 	private Timestamp updatedAt;
+	
+	public Person() {}
+	
+	public Person(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;
@@ -83,6 +92,14 @@ public class Person {
 
 	public void setUsers(Set<User> users) {
 		this.users = users;
+	}
+
+	public Set<Leave> getLeaves() {
+		return leaves;
+	}
+
+	public void setLeaves(Set<Leave> leaves) {
+		this.leaves = leaves;
 	}
     
 }

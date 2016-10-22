@@ -3,6 +3,7 @@ package com.springmvc.controllers;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.activiti.engine.IdentityService;
@@ -12,6 +13,12 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +32,7 @@ import com.springmvc.constants.FlowVariableConst;
 import com.springmvc.forms.LeaveForm;
 import com.springmvc.models.Leave;
 import com.springmvc.models.LeaveType;
+import com.springmvc.models.Person;
 import com.springmvc.repositories.LeaveRepository;
 import com.springmvc.services.ActivitiTaskService;
 import com.springmvc.services.ISecurityService;
@@ -42,12 +50,17 @@ public class LeaveController {
 	@Autowired ISecurityService securityService;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView listAllUsers() {
+	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("/leaves/index");
 		
-		Iterable<Leave> leaves = leaveRepository.findAll();
+		// page number
+		String pageNumStr = request.getParameter("page");
+		int pageNum = pageNumStr == null? 0 : Integer.parseInt(pageNumStr) - 1;
 		
-		mv.addObject("leaves", leaves);
+		Pageable pageable = new PageRequest(pageNum, 5, Sort.Direction.DESC, "createdAt");
+		Page<Leave> page = leaveRepository.findList(pageable);
+		
+		mv.addObject("page", page);
 		return mv;
 	}
 	
@@ -62,35 +75,35 @@ public class LeaveController {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ModelAndView create(HttpServletRequest request, @Valid LeaveForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	@Transactional
+	public ResponseEntity<?> create(HttpServletRequest request, @Valid LeaveForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
-			redirectAttr.addFlashAttribute("notice", result.getFieldErrors());
-			return new ModelAndView("/leaves/add");
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
+		
+		Long personId = securityService.findLoggedInUser().getPerson().getId();
+		// Long userId = securityService.findLoggedInUser().getId();
 		
 		// save a leave
 		Leave leave = new Leave();
 		BeanUtils.copyProperties(form, leave);
 		leave.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		leave.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		leave.setPersonId(securityService.findLoggedInUser().getId());
+		leave.setPerson(new Person(personId));
 		leaveRepository.save(leave);
 		
 		//用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-		leave.setPersonId(1L); // set current session id
-        identityService.setAuthenticatedUserId(leave.getPersonId().toString());
+        identityService.setAuthenticatedUserId(personId.toString());
         
         String businessKey = leave.getId().toString();
         Map<String, Object> variables = Maps.newHashMap();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("leave", businessKey, variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("leaveProcess", businessKey, variables);
         String processInstanceId = processInstance.getId();
         leave.setProcessInstanceId(processInstanceId);
         leaveRepository.save(leave);
 		
-		redirectAttr.addFlashAttribute("notice", "Created success!");
-		
-		return new ModelAndView("redirect:/leaves");
+        return ResponseEntity.status(HttpStatus.CREATED).body(leave.getId());
 	}
 	
 	@RequestMapping(value = "/{id}/agree", method = RequestMethod.PATCH)

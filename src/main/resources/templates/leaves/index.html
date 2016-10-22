@@ -3,34 +3,44 @@
 	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
 	layout:decorator="layout">
 <head>
-    <title>角色管理</title>
+    <title>请假管理</title>
     <meta charset="utf-8" />
 </head>
 <body>
-	<h1 layout:fragment="header">角色管理</h1>
+	<h1 layout:fragment="header">请假管理</h1>
 	<div layout:fragment="breadcrumb">
 		<a href="/">首页</a>
 		>
-		角色管理
+		请假管理
 	</div>
 	<div layout:fragment="content" class="container">
-		<a th:href="@{/roles/add}" class="btn btn-default">新增角色</a>
+		<a th:href="@{/roles/add}" class="btn btn-default">新增请假</a>
 		<div th:text="${notice}"></div>
 		<table border="1">
 			<thead>
 				<tr>
-					<th width="200">角色名</th>
-					<th width="200">身份</th>
+					<th>请假人</th>
+					<th>请假时间</th>
+					<th>天数</th>
+					<th>理由</th>
+					<th>申请时间</th>
+					<th>更新时间</th>
+					<th>状态</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="obj : ${page}">
-					<td><a th:href="@{/roles/{id}(id=${obj.id})}" th:text="${obj.name}"></a></td>
-					<td th:text="${obj.code}"></td>
+					<td><a th:href="@{/leaves/{id}(id=${obj.id})}" th:text="${obj.person.name}"></a></td>
+					<td><th:block th:text="${obj.beginAt}" /> ~ <th:block th:text="${obj.endAt}" /></td>
+					<td th:text="${obj.days}"></td>
+					<td th:text="${obj.reason}"></td>
+					<td th:text="${obj.createdAt}"></td>
+					<td th:text="${obj.updatedAt}"></td>
+					<th></th>
 					<td>
-						<a th:href="@{/roles/{id}/edit(id=${obj.id})}">Edit</a>
-						<a href="javascript:void(0);" th:attr="data-href=@{/roles/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>
+						<a th:href="@{/leaves/{id}/edit(id=${obj.id})}">Edit</a>
+						<a href="javascript:void(0);" th:attr="data-href=@{/leaves/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>
 					</td>
 				</tr>
 			</tbody>

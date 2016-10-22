@@ -9,6 +9,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -35,8 +37,9 @@ public class Leave {
 
     private String reason;
     
-    @Column(nullable = false)
-    private Long personId;
+    @ManyToOne
+	@JoinColumn(name="person_id")
+	private Person person;
     
     @Column(nullable = false)
     private String processInstanceId; 
@@ -95,12 +98,12 @@ public class Leave {
 		this.reason = reason;
 	}
 
-	public Long getPersonId() {
-		return personId;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setPersonId(Long personId) {
-		this.personId = personId;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	public String getProcessInstanceId() {
