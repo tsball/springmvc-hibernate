@@ -35,6 +35,7 @@ import com.springmvc.models.LeaveType;
 import com.springmvc.models.Person;
 import com.springmvc.repositories.LeaveRepository;
 import com.springmvc.services.ActivitiTaskService;
+import com.springmvc.services.ILeaveService;
 import com.springmvc.services.ISecurityService;
 import com.springmvc.utils.DateTimeUtil;
 
@@ -47,10 +48,42 @@ public class LeaveController {
 	@Autowired IdentityService identityService;
 	@Autowired RuntimeService runtimeService;
 	@Autowired TaskService taskService;
+	@Autowired ILeaveService leaveService;
 	@Autowired ISecurityService securityService;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("/leaves/index");
+		
+		// page number
+		String pageNumStr = request.getParameter("page");
+		int pageNum = pageNumStr == null? 0 : Integer.parseInt(pageNumStr) - 1;
+		
+		Pageable pageable = new PageRequest(pageNum, 5, Sort.Direction.DESC, "createdAt");
+		Page<Leave> page = leaveRepository.findList(pageable);
+		
+		mv.addObject("page", page);
+		return mv;
+	}
+	
+	@RequestMapping(value = "apply_list", method = RequestMethod.GET)
+	public ModelAndView applyList(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("/leaves/index");
+		
+		// page number
+		String pageNumStr = request.getParameter("page");
+		int pageNum = pageNumStr == null? 0 : Integer.parseInt(pageNumStr) - 1;
+		
+		Pageable pageable = new PageRequest(pageNum, 5, Sort.Direction.DESC, "createdAt");
+		Long personId = securityService.findLoggedInUser().getPerson().getId();
+		Page<Leave> page = leaveService.findApplyList(personId, pageable);
+		
+		mv.addObject("page", page);
+		return mv;
+	}
+	
+	@RequestMapping(value = "audit_list", method = RequestMethod.GET)
+	public ModelAndView auditList(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("/leaves/index");
 		
 		// page number
