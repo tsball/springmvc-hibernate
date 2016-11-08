@@ -1,7 +1,6 @@
 package com.springmvc.models;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -17,10 +16,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")
 @Entity
@@ -59,6 +60,9 @@ public class User implements UserDetails {
 	@Column(nullable = false)
 	//@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp updatedAt;
+	
+	@Transient
+	private List<GrantedAuthority> authorities = Lists.newArrayList();
 
 	public long getId() {
 		return id;
@@ -110,11 +114,11 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		for (Role role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role.getCode().toString()));
-		}
 	    return authorities;
+	}
+	
+	public void setAuthorities(List<GrantedAuthority> authorities) {
+	    this.authorities = authorities;
 	}
 
 	public Person getPerson() {
