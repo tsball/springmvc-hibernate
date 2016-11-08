@@ -70,7 +70,6 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
 					
 					// UserDetailsService的GrantedAuthority使用什么作为role的标识(构造函数中传入)，这里就应该使用什么作为SecurityConfig的构造函数的值
 					// 大约原理：这里会把该url资源对应的允许的角色(s)找出来，然后传递到下去，跟UserDetailsService中当前用户对应的角色(s)对比，匹配则允许访问
-					// 问题：当前只能放一个权限到configAttrCollection，多个它会执行并查询，非Or查询.查看：UnanimousBased::decide() and RoleVoter::vote(..)
 					ConfigAttribute configAttr = new SecurityConfig(role.getCode().toString()); // WebExpressionConfigAttribute
 			        configAttrCollection.add(configAttr);
 				}  
