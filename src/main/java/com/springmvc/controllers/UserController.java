@@ -1,8 +1,12 @@
 package com.springmvc.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -10,6 +14,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -59,9 +64,17 @@ public class UserController {
 		int pageNum = pageNumStr == null? 0 : Integer.parseInt(pageNumStr) - 1;
 		
 		Pageable pageable = new PageRequest(pageNum, 5, Sort.Direction.ASC, "username");
-		Page<User> page = userRepository.findList(pageable);
 		
-		//List<User> page = entityManager.createQuery("SELECT u, u.person FROM User u JOIN fetch u.person").getResultList();
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+	    CriteriaQuery<User> query = builder.createQuery(User.class);
+	    Root<User> user = query.from(User.class);
+	    user.fetch("roles");
+	    user.fetch("person");
+	    query.select(user);
+		
+		List<User> list = entityManager.createQuery(query).setFirstResult(pageable.getOffset()).setMaxResults(pageable.getPageSize()).getResultList();
+		Long count = (Long) entityManager.createQuery("SELECT count(u) from User u").getSingleResult();
+		Page<User> page = new PageImpl<User>(list, pageable, count);
 		
 		mv.addObject("page", page);
 		return mv;

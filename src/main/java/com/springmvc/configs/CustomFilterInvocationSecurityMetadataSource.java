@@ -72,9 +72,7 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
 					// 大约原理：这里会把该url资源对应的允许的角色(s)找出来，然后传递到下去，跟UserDetailsService中当前用户对应的角色(s)对比，匹配则允许访问
 					ConfigAttribute configAttr = new SecurityConfig(role.getCode().toString()); // WebExpressionConfigAttribute
 			        configAttrCollection.add(configAttr);
-				}
-				
-		        
+				}  
 			}
 	    }
 	    

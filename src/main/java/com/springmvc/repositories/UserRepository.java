@@ -2,10 +2,8 @@ package com.springmvc.repositories;
 
 import javax.transaction.Transactional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.springmvc.models.User;
@@ -21,7 +19,7 @@ import com.springmvc.models.User;
  */
 @Repository
 @Transactional
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> { //QueryDslPredicateExecutor<User>
 
   /**
    * Return the user having the passed name or null if no user is found.
@@ -30,9 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
    */
   public User findByUsername(String username);
   
-  //@Query("SELECT u FROM User u JOIN fetch u.person")
-  @Query(value="SELECT u FROM User u JOIN FETCH u.person JOIN FETCH u.roles",
-		countQuery="SELECT count(u) FROM User u")
-  Page<User> findList(Pageable pageable);
+  //@Query(value="SELECT u FROM User u JOIN FETCH u.person JOIN FETCH u.roles",
+  //		countQuery="SELECT count(u) FROM User u")
+  //Page<User> findAll(Specification<User> spec, Pageable pageable);
 
 }

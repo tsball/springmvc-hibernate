@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleVoter;
-import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,9 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AccessDecisionManager defaultAccessDecisionManager() {
         List<AccessDecisionVoter<?>> voters = new ArrayList<AccessDecisionVoter<?>>();
+        // **** 重要：不同的AccessDecisionManager(decide) 与  Voter(vote) 组合了不同的匹配规则
         // voters.add(new WebExpressionVoter()); // default expression: [hasRole('ROLE_ADMIN')]
         voters.add(new RoleVoter()); // expression: ROLE_ADMIN
-        AccessDecisionManager result = new UnanimousBased(voters); // ROLE_ANONYMOUS will not allow to access. vs AffirmativeBased
+        AccessDecisionManager result = new AffirmativeBased(voters); // ROLE_ANONYMOUS will not allow to access. vs UnanimousBased/AffirmativeBased/ConsensusBased
         return result;
     }
 

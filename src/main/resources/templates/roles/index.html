@@ -27,7 +27,7 @@
 			<tbody>
 				<tr th:each="obj : ${page}">
 					<td><a th:href="@{/roles/{id}(id=${obj.id})}" th:text="${obj.name}"></a></td>
-					<td th:text="${obj.code}"></td>
+					<td th:text="#{'role.code.' + ${obj.code}}"></td>
 					<td>
 						<a th:href="@{/roles/{id}/edit(id=${obj.id})}">Edit</a>
 						<a href="javascript:void(0);" th:attr="data-href=@{/roles/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>

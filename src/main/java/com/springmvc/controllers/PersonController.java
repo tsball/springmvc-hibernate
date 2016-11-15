@@ -3,6 +3,11 @@ package com.springmvc.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -13,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -44,7 +50,15 @@ public class PersonController {
 		ModelAndView mv = new ModelAndView("/people/index");
 		
 		Pageable pageable = new PageRequest(0, 10, Sort.Direction.ASC, "name");
-		Page<Person> page = personRepository.findList(pageable);
+		Specification<Person> spec = new Specification<Person>() {  
+            @Override  
+            public Predicate toPredicate(Root<Person> root, CriteriaQuery<?> query, CriteriaBuilder cb) {  
+                root = query.from(Person.class); // from table/join/fetch
+                Path<String> nameExp = root.get("name");  
+                return cb.like(nameExp, "%P%");  
+            }
+        };
+		Page<Person> page = personRepository.findAll(spec, pageable);
 		
 		mv.addObject("page", page);		
 		return mv;

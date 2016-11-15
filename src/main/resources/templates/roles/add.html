@@ -17,7 +17,7 @@
 	        
 			<div class="form-group">
 				<select name="code">
-   					<option th:each="obj : ${roleCodes}" th:value="${obj}" th:text="${obj}" />
+   					<option th:each="obj : ${roleCodes}" th:value="${obj}" th:text="#{'role.code.' + ${obj}}" />
                 </select>
 			</div>
 			

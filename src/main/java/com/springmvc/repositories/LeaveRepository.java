@@ -12,5 +12,12 @@ public interface LeaveRepository extends JpaRepository<Leave, Long> {
 	@Query(value="SELECT l FROM Leave l JOIN FETCH l.person",
 			countQuery="SELECT count(l) FROM Leave l")
 	Page<Leave> findList(Pageable pageable);
+	
+	/**
+	@Query(value = "SELECT * FROM leaves WHERE person_id = ?1",
+		    countQuery = "SELECT count(*) FROM leaves WHERE person_id = ?1",
+		    nativeQuery = true)
+	Page<Leave> findApplyList(Long startPersonId, Pageable pageable);
+	**/
 
 }
