@@ -35,7 +35,6 @@ import com.springmvc.models.LeaveType;
 import com.springmvc.models.Person;
 import com.springmvc.repositories.LeaveRepository;
 import com.springmvc.services.ActivitiTaskService;
-import com.springmvc.services.ILeaveService;
 import com.springmvc.services.ISecurityService;
 import com.springmvc.utils.DateTimeUtil;
 
@@ -48,7 +47,7 @@ public class LeaveController {
 	@Autowired IdentityService identityService;
 	@Autowired RuntimeService runtimeService;
 	@Autowired TaskService taskService;
-	@Autowired ILeaveService leaveService;
+	//@Autowired ILeaveService leaveService;
 	@Autowired ISecurityService securityService;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
@@ -76,7 +75,8 @@ public class LeaveController {
 		
 		Pageable pageable = new PageRequest(pageNum, 5, Sort.Direction.DESC, "createdAt");
 		Long personId = securityService.findLoggedInUser().getPerson().getId();
-		Page<Leave> page = leaveService.findApplyList(personId, pageable);
+		//Page<Leave> page = leaveService.findApplyList(personId, pageable);
+		Page<Leave> page = null;
 		
 		mv.addObject("page", page);
 		return mv;
