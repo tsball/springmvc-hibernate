@@ -30,7 +30,7 @@ public class OperationLog {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private OperationLogGroup group;
+	private OperationLogCategory category;
 	
 	@Column(nullable = false)
 	private String message;
@@ -66,12 +66,12 @@ public class OperationLog {
 		this.event = event;
 	}
 
-	public OperationLogGroup getGroup() {
-		return group;
+	public OperationLogCategory getCategory() {
+		return category;
 	}
 
-	public void setGroup(OperationLogGroup group) {
-		this.group = group;
+	public void setCategory(OperationLogCategory category) {
+		this.category = category;
 	}
 
 	public String getMessage() {

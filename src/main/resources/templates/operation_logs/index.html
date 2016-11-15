@@ -31,7 +31,7 @@
 					<td><a th:href="@{/operation_logs/{id}(id=${obj.id})}" th:text="${obj.message}"></a></td>
 					<td th:text="${obj.riskLevel}"></td>
 					<td th:text="${obj.event}"></td>
-					<td th:text="${obj.group}"></td>
+					<td th:text="${obj.category}"></td>
 					<td th:text="${obj.createdAt}"></td>
 					<td>
 						<a href="javascript:void(0);" th:attr="data-href=@{/operation_logs/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>

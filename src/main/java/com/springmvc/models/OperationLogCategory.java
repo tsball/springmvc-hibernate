@@ -1,6 +1,6 @@
 package com.springmvc.models;
 
-public enum OperationLogGroup {
+public enum OperationLogCategory {
 	
 	FINANCIAL, 	// 财务
 	ADMIN, 		// 行政

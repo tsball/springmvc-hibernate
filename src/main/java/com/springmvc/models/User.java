@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -46,6 +47,9 @@ public class User implements UserDetails {
     //    inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>(0);
+	
+	@OneToMany(mappedBy="user", orphanRemoval=true)
+    private Set<OperationLog> operationLogs = new HashSet<OperationLog>(0);
 	
 	@ManyToOne
 	//@Fetch(FetchMode.JOIN)
@@ -106,6 +110,14 @@ public class User implements UserDetails {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Set<OperationLog> getOperationLogs() {
+		return operationLogs;
+	}
+
+	public void setOperationLogs(Set<OperationLog> operationLogs) {
+		this.operationLogs = operationLogs;
 	}
 
 	@Override

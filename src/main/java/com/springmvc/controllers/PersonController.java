@@ -28,6 +28,7 @@ import com.springmvc.models.Person;
 import com.springmvc.repositories.PersonRepository;
 import com.springmvc.representations.TaskRepresentation;
 import com.springmvc.services.ActivitiTaskService;
+import com.springmvc.services.OperationLogService;
 import com.springmvc.utils.DateTimeUtil;
 
 @RestController
@@ -36,6 +37,7 @@ public class PersonController {
 	
 	@Autowired PersonRepository personRepository;
 	@Autowired ActivitiTaskService activitiTaskService;
+	@Autowired OperationLogService operationLogService;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
@@ -124,6 +126,9 @@ public class PersonController {
 		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		personRepository.save(person);
 		
+		// operation log
+		operationLogService.logCreateOption(person);
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(person.getId());
 	}
 	
@@ -145,6 +150,8 @@ public class PersonController {
 		}
 		
 		Person person = personRepository.findOne(id);
+		Person oldPerson = new Person();
+		BeanUtils.copyProperties(person, oldPerson);
 		
 		if (person == null) {
 			return ResponseEntity.status(HttpStatus.NOT_EXTENDED).body("Person can not found with id: " + id);
@@ -153,6 +160,9 @@ public class PersonController {
 		BeanUtils.copyProperties(form, person);
 		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		personRepository.save(person);
+		
+		// operation log
+		operationLogService.logUpdateOption(oldPerson, person);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(person.getId());
 	}
