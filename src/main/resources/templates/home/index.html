@@ -5,6 +5,9 @@
 <head>
     <title>主页面</title>
     <meta charset="utf-8" />
+    <th:block layout:fragment="stylesheet_block">
+    	<link rel="stylesheet/less" type="text/css" th:href="@{/less/home.less}" />
+    </th:block>
 </head>
 <body>
 	<h1 layout:fragment="header">Home Console</h1>
@@ -24,6 +27,11 @@
 			<ul>
 				<li><a th:href="@{/people/}">人员管理</a></li>
 				<li><a th:href="@{/operation_logs/}">日志管理</a></li>
+			</ul>
+			<ul>
+				<li><a th:href="@{/notifications/send}">发送通知</a></li>
+				<li><a th:href="@{/notifications/received_list}">收件箱 (<span id="notification-unread">0</span>)</a></li>
+				<li><a th:href="@{/notifications/sent_list}">已发送</a></li>
 			</ul>
 		</p>
 		<p>

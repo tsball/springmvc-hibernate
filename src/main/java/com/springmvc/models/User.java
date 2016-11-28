@@ -57,6 +57,9 @@ public class User implements UserDetails {
 	@JoinColumn(name="person_id")
 	private Person person;
 	
+	@ManyToMany(mappedBy="users")
+	private Set<Notification> notifications = new HashSet<Notification>(0);
+	
 	@Column(nullable = false)
 	//@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp createdAt;
@@ -159,6 +162,14 @@ public class User implements UserDetails {
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
+	}
+
+	public Set<Notification> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(Set<Notification> notifications) {
+		this.notifications = notifications;
 	}
 
 }

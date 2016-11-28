@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+    <title>角色管理</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+	<h1 layout:fragment="header">角色管理</h1>
+	<div layout:fragment="breadcrumb">
+		<a href="/">首页</a>
+		>
+		角色管理
+	</div>
+	<div layout:fragment="content" class="container">
+		<a th:href="@{/roles/add}" class="btn btn-default">新增角色</a>
+		<div th:text="${notice}"></div>
+		<table border="1">
+			<thead>
+				<tr>
+					<th width="200">角色名</th>
+					<th width="200">身份</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="obj : ${page}">
+					<td><a th:href="@{/roles/{id}(id=${obj.id})}" th:text="${obj.name}"></a></td>
+					<td th:text="#{'role.code.' + ${obj.code}}"></td>
+					<td>
+						<a th:href="@{/roles/{id}/edit(id=${obj.id})}">Edit</a>
+						<a href="javascript:void(0);" th:attr="data-href=@{/roles/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
