@@ -21,9 +21,15 @@
 		</form>
 	</div>
 </body>
-<script type="text/javascript" layout:fragment="javascript_block">
+<th:block layout:fragment="javascript_block">
+<script type="text/javascript" src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script type="text/javascript">
 //<![CDATA[
 $(function(){
+	// stomp socket
+	connect();
+	
 	// validate signup form on keyup and submit
 	$(".form-validation").validate({
 		success: "valid",
@@ -51,6 +57,34 @@ $(function(){
 	});
 });
 
+function connect() {
+	var socket = new SockJS('/my-websocket');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function (frame) {
+		console.log('Connected: ' + frame);
+        
+        // This topic is use to get back the response to the /hello message ...
+        stompClient.subscribe('/topic/greetings', function (message) {
+            //log("Got a message: " + JSON.parse(greeting.body).content);
+        	popupNotification(message);
+        });
+        
+    });
+}
+
+// Send function
+function send()
+{
+	if(stompClient != null)
+	{
+		console.log("Sending a message on topic /app/hello ...");
+		// stompClient.send("/app/hello", {}, JSON.stringify({'name': 'Bruno'}));
+		
+		var content = $('[name="content"]').val();
+		stompClient.send("/app/hello", {}, content);
+	}
+}
+
 function formSubmitHandler(form) {
     var btnSubmitText = $('#btn-submit').html();
 
@@ -74,52 +108,6 @@ function formSubmitHandler(form) {
       }
     });
     return false;
-}
-
-// ============== notify with web socket ==================
-var websocket = null;  
-
-//判断当前浏览器是否支持WebSocket
-if ('WebSocket' in window) {  
-    websocket = new WebSocket("ws://localhost:8080/messageSocket");  
-} else {
-    alert('Not support websocket')  
-}
-	
-//连接发生错误的回调方法  
-websocket.onerror = function () {
-    // popupNotification("error");  
-};  
-
-//连接成功建立的回调方法  
-websocket.onopen = function (event) {
-    // popupNotification("open a socket connetion");  
-}  
-
-//接收到消息的回调方法  
-websocket.onmessage = function (event) {
-    popupNotification(event.data);  
-}  
-
-//连接关闭的回调方法  
-websocket.onclose = function () {
-    // popupNotification("close a socket connetion");  
-}  
-
-//监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。  
-window.onbeforeunload = function () {
-    websocket.close();
-}
-
-//关闭连接  
-function closeWebSocket() {
-    websocket.close();  
-}  
-
-//发送消息 
-function send() {
-    var message = $('[name="content"]').val();
-    websocket.send(message);  
 }
 
 //======================= 弹出窗口
@@ -169,4 +157,5 @@ function popupNotification(message) {
 }
 //]]>
 </script>
+</th:block>
 </html>
