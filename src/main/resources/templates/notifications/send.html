@@ -24,8 +24,12 @@
 <th:block layout:fragment="javascript_block">
 <script type="text/javascript" src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
+<script th:inline="javascript" type="text/javascript">
+/*<![CDATA[*/
+/*[+
+  var userId  = [[${userId}]];
+ +]*/
+
 $(function(){
 	// stomp socket
 	connect();
@@ -63,10 +67,15 @@ function connect() {
 	stompClient.connect({}, function (frame) {
 		console.log('Connected: ' + frame);
         
-        // This topic is use to get back the response to the /hello message ...
-        stompClient.subscribe('/topic/greetings', function (message) {
+        // broadcast subscribe
+        stompClient.subscribe('/topic/greeting', function (data) {
             //log("Got a message: " + JSON.parse(greeting.body).content);
-        	popupNotification(message);
+        	popupNotification(data.body);
+        });
+        
+        // personal subscrible
+        stompClient.subscribe('/user/' + userId + '/message', function(data){  
+        	popupNotification(data.body);  
         });
         
     });
@@ -77,11 +86,21 @@ function send()
 {
 	if(stompClient != null)
 	{
-		console.log("Sending a message on topic /app/hello ...");
-		// stompClient.send("/app/hello", {}, JSON.stringify({'name': 'Bruno'}));
-		
+		var targetUserId = $('[name="title"]').val();
 		var content = $('[name="content"]').val();
-		stompClient.send("/app/hello", {}, content);
+		
+		if (targetUserId != "") {
+			// send specified people
+			
+			stompClient.send("/user/"+ targetUserId +"/message", {}, content);
+		} else {
+			// broadcast
+			console.log("Sending a message on topic /app/greeting ...");
+			// stompClient.send("/app/hello", {}, JSON.stringify({'name': 'Bruno'}));
+			
+			stompClient.send("/app/greeting", {}, content);
+		}
+		
 	}
 }
 
@@ -155,7 +174,7 @@ function popupNotification(message) {
       alert(message);
    }
 }
-//]]>
+/*]]>*/
 </script>
 </th:block>
 </html>

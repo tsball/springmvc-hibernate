@@ -15,16 +15,13 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	@Override
     public void configureMessageBroker(MessageBrokerRegistry config) 
 	{
-		// Enables the STOMP broker relay and sets its destination prefixes to "/topic". 
-		// (It is possible to set more than one destination, e.g. "/topic", "/queue", ..)
-		// This is a clue to Spring that any messages whose destination begins with /topic 
-		// should go to the STOMP broker. Depending on which STOMP broker you choose, you 
-		// may be limited in your choices for the destination prefix
-        config.enableSimpleBroker("/topic");
+		// 表示在topic和user这两个域上可以向客户端发消息
+        config.enableSimpleBroker("/topic", "/user");
         
-        // Sets an application prefix to "/app". Any messages whose destination begins
-        // with /app will be routed to an @MessageMapping method and not published to a 
-        // broker queue or topic.
+        // 表示给指定用户发送（一对一）的主题前缀是 /user/  
+        config.setUserDestinationPrefix("/user/");
+        
+        // 表示客户端向服务端发送时的主题上面需要加"/app"作为前缀
         config.setApplicationDestinationPrefixes("/app");
     }
 	

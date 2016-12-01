@@ -25,6 +25,7 @@ import com.springmvc.forms.RoleForm;
 import com.springmvc.models.Notification;
 import com.springmvc.repositories.AuthorityRepository;
 import com.springmvc.repositories.NotificationRepository;
+import com.springmvc.services.SecurityService;
 import com.springmvc.utils.DateTimeUtil;
 import com.springmvc.validators.RoleValidator;
 
@@ -36,11 +37,13 @@ public class NotificationController {
 	@Autowired AuthorityRepository authorityRepository;
 	@Autowired RoleValidator roleValidtor;
 	@Autowired EntityManager entityManager;
+	@Autowired SecurityService securityService;
 	
 	@RequestMapping(value = "send", method = RequestMethod.GET)
 	public ModelAndView send(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("/notifications/send");
 		
+		mv.addObject("userId", securityService.findLoggedInUser().getId());
 		return mv;
 	}
 	
