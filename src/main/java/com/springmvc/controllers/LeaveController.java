@@ -32,7 +32,7 @@ import com.springmvc.constants.FlowVariableConst;
 import com.springmvc.forms.LeaveForm;
 import com.springmvc.models.Leave;
 import com.springmvc.models.LeaveType;
-import com.springmvc.models.Person;
+import com.springmvc.models.Employee;
 import com.springmvc.repositories.LeaveRepository;
 import com.springmvc.services.ActivitiTaskService;
 import com.springmvc.services.ISecurityService;
@@ -74,8 +74,8 @@ public class LeaveController {
 		int pageNum = pageNumStr == null? 0 : Integer.parseInt(pageNumStr) - 1;
 		
 		Pageable pageable = new PageRequest(pageNum, 5, Sort.Direction.DESC, "createdAt");
-		Long personId = securityService.findLoggedInUser().getPerson().getId();
-		//Page<Leave> page = leaveService.findApplyList(personId, pageable);
+		Long employeeId = securityService.findLoggedInUser().getEmployee().getId();
+		//Page<Leave> page = leaveService.findApplyList(employeeId, pageable);
 		Page<Leave> page = null;
 		
 		mv.addObject("page", page);
@@ -115,7 +115,7 @@ public class LeaveController {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
 		
-		Long personId = securityService.findLoggedInUser().getPerson().getId();
+		Long employeeId = securityService.findLoggedInUser().getEmployee().getId();
 		// Long userId = securityService.findLoggedInUser().getId();
 		
 		// save a leave
@@ -123,11 +123,11 @@ public class LeaveController {
 		BeanUtils.copyProperties(form, leave);
 		leave.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		leave.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		leave.setPerson(new Person(personId));
+		leave.setEmployee(new Employee(employeeId));
 		leaveRepository.save(leave);
 		
 		//用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-        identityService.setAuthenticatedUserId(personId.toString());
+        identityService.setAuthenticatedUserId(employeeId.toString());
         
         String businessKey = leave.getId().toString();
         Map<String, Object> variables = Maps.newHashMap();

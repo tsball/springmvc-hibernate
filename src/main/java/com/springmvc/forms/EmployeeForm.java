@@ -4,7 +4,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class PersonForm {
+public class EmployeeForm {
 
 	@NotEmpty
     @Size(min=5, max=16)
@@ -12,6 +12,12 @@ public class PersonForm {
 
 	@NotEmpty
 	private String code;
+	
+	@NotEmpty
+	private Long role;
+	
+	@NotEmpty
+	private Long manager;
 
 	public String getName() {
 		return name;
@@ -28,4 +34,22 @@ public class PersonForm {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	public Long getRole() {
+		return role;
+	}
+
+	public void setRole(Long role) {
+		this.role = role;
+	}
+
+	public Long getManager() {
+		return manager;
+	}
+
+	public void setManager(Long manager) {
+		this.manager = manager;
+	}
+	
+	
 }

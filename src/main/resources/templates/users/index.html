@@ -28,7 +28,7 @@
 			<tbody>
 				<tr th:each="obj : ${page}">
 					<td><a th:href="@{/users/{id}(id=${obj.id})}" th:text="${obj.username}"></a></td>
-					<td><a th:href="@{/people/{id}(id=${obj.person.id})}" th:text="${obj.person.name}"></a></td>
+					<td><a th:href="@{/employees/{id}(id=${obj.employee.id})}" th:text="${obj.employee.name}"></a></td>
 					<td><span th:text="${#strings.listJoin(obj.roles,',')}" th:remove="tag"></span></td>
 					<td>
 						<a th:href="@{/users/{id}/edit(id=${obj.id})}">Edit</a>

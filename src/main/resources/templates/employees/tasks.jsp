@@ -6,12 +6,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Person List</title>
+<title>Employee List</title>
 
 </head>
 <body>
-<h1>Person Tasks</h1>
-	<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/people/${person.id}/tasks" data-method="POST">Start A Task</a>
+<h1>Employee Tasks</h1>
+	<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/employees/${employee.id}/tasks" data-method="POST">Start A Task</a>
 	<div>${notice}</div>
 	<table border="1">
 		<thead>

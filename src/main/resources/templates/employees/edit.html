@@ -10,14 +10,26 @@
 	<h1 layout:fragment="header">编辑人员</h1>
 	
 	<div layout:fragment="content" class="container">
-		<form th:method="PUT" th:action="@{/people/{id}(id=${person.id})}" class="form-validation">
+		<form th:method="PUT" th:action="@{/employees/{id}(id=${employee.id})}" class="form-validation">
 			<div class="form-group">
-                <input type="text" name="name" th:value="${person.name}" class="form-control" placeholder="Name" autofocus="autofocus" />
+                <input type="text" name="name" th:value="${employee.name}" class="form-control" placeholder="Name" autofocus="autofocus" />
             </div>
             
             <div class="form-group">
-                <input type="text" name="code" th:value="${person.code}" class="form-control" placeholder="Code" />
+                <input type="text" name="code" th:value="${employee.code}" class="form-control" placeholder="Code" />
             </div>
+            
+            <div class="form-group">
+				<select th:name="role" th:field="*{employee.role}">
+   					<option th:each="obj : ${roles}" th:value="${obj.id}" th:text="${obj.name}" />
+                </select>
+			</div>
+			
+			<div class="form-group">
+				<select th:name="manager" th:field="*{employee.manager}">
+   					<option th:each="obj : ${employees}" th:value="${obj.id}" th:text="${obj.name}" />
+                </select>
+			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 		</form>
 	</div>
@@ -63,7 +75,7 @@ function formSubmitHandler(form) {
         $('#btn-submit').append("中...");
       },
       success: function (response) {
-    	  location.href = "/people/" + response;
+    	  location.href = "/employees/" + response;
       },
       error: function(xhr, status, error) {
     	  //status: error

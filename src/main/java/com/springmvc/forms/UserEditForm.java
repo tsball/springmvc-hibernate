@@ -14,7 +14,7 @@ public class UserEditForm {
 	protected String username;
 	
 	@NotNull
-	protected Long person;
+	protected Long employee;
 	
 	@NotNull
 	protected Set<Long> roles;
@@ -27,12 +27,12 @@ public class UserEditForm {
 		this.username = username;
 	}
 
-	public Long getPerson() {
-		return person;
+	public Long getEmployee() {
+		return employee;
 	}
 
-	public void setPerson(Long person) {
-		this.person = person;
+	public void setEmployee(Long employee) {
+		this.employee = employee;
 	}
 
 	public Set<Long> getRoles() {

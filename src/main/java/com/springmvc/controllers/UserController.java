@@ -35,10 +35,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.springmvc.forms.UserEditForm;
 import com.springmvc.forms.UserForm;
-import com.springmvc.models.Person;
+import com.springmvc.models.Employee;
 import com.springmvc.models.Role;
 import com.springmvc.models.User;
-import com.springmvc.repositories.PersonRepository;
+import com.springmvc.repositories.EmployeeRepository;
 import com.springmvc.repositories.RoleRepository;
 import com.springmvc.repositories.UserRepository;
 import com.springmvc.utils.DateTimeUtil;
@@ -50,7 +50,7 @@ public class UserController {
 	
 	@Autowired UserRepository userRepository;
 	@Autowired RoleRepository roleRepository;
-	@Autowired PersonRepository personRepository;
+	@Autowired EmployeeRepository employeeRepository;
 	@Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired UserValidator userValidtor;
 	@Autowired EntityManager entityManager;
@@ -69,7 +69,7 @@ public class UserController {
 	    CriteriaQuery<User> query = builder.createQuery(User.class);
 	    Root<User> user = query.from(User.class);
 	    user.fetch("roles");
-	    user.fetch("person");
+	    user.fetch("employee");
 	    query.select(user);
 		
 		List<User> list = entityManager.createQuery(query).setFirstResult(pageable.getOffset()).setMaxResults(pageable.getPageSize()).getResultList();
@@ -95,10 +95,10 @@ public class UserController {
 		ModelAndView mv = new ModelAndView("/users/add", "user", new UserForm());
 		
 		Iterable<Role> roles = roleRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
-		Iterable<Person> people = personRepository.findAll();
+		Iterable<Employee> employees = employeeRepository.findAll();
 		
 		mv.addObject("roles", roles);
-		mv.addObject("people", people);
+		mv.addObject("employees", employees);
 		return mv;
 	}
 	
@@ -119,7 +119,7 @@ public class UserController {
 		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setRoles(Sets.newHashSet(roles));
-		user.setPerson(personRepository.findOne(form.getPerson()));
+		user.setEmployee(employeeRepository.findOne(form.getEmployee()));
 		userRepository.save(user);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(user.getId());
@@ -131,11 +131,11 @@ public class UserController {
 		
 		User user = userRepository.findOne(id);
 		Iterable<Role> roles = roleRepository.findAll();
-		Iterable<Person> people = personRepository.findAll();
+		Iterable<Employee> employees = employeeRepository.findAll();
 		
 		mv.addObject("user", user);
 		mv.addObject("roles", roles);
-		mv.addObject("people", people);
+		mv.addObject("employees", employees);
 		return mv;
 	}
 	
@@ -152,7 +152,7 @@ public class UserController {
 		BeanUtils.copyProperties(form, user);
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setRoles(Sets.newHashSet(roles));
-		user.setPerson(personRepository.findOne(form.getPerson()));
+		user.setEmployee(employeeRepository.findOne(form.getEmployee()));
 		userRepository.save(user);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(user.getId());

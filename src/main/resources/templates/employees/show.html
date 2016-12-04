@@ -11,25 +11,25 @@
 	<div layout:fragment="breadcrumb">
 		<a href="/">首页</a>
 		>
-		<a href="/people">人员管理</a>
+		<a href="/employees">人员管理</a>
 		>
 		记录详情
 	</div>
 	<div layout:fragment="content" class="container">
 		<div>
 			<label>名称</label>
-			<th:block th:text="${person.name}" />
+			<th:block th:text="${employee.name}" />
 		</div>
 		<div>
 			<label>编号</label>
-			<th:block th:text="${person.code}" />
+			<th:block th:text="${employee.code}" />
 		</div>
 		<div>
 			<label>管理员账号</label>
-			<ul><li th:each="obj : ${person.users}" th:text="${obj.username}"></li></ul>
+			<ul><li th:each="obj : ${employee.users}" th:text="${obj.username}"></li></ul>
 		</div>
 		
-		<div><a href="/people">返回</a></div>
+		<div><a href="/employees">返回</a></div>
 	</div>
 	
 </body>

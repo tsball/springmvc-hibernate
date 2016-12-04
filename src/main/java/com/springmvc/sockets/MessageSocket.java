@@ -29,20 +29,20 @@ public class MessageSocket {
 		this.session = session;
 		messageSocketSet.add(this);
 		addOnlineCount();
-		System.out.println("New person listens to the message socket! Current people: " + getOnlineCount());
+		System.out.println("New employee listens to the message socket! Current employees: " + getOnlineCount());
 	}
 
 	@OnClose
 	public void onClose() {
 		messageSocketSet.remove(this);
 		subOnlineCount();
-		System.out.println("One person stops listening to the message socket! Current people: " + getOnlineCount());
+		System.out.println("One employee stops listening to the message socket! Current employees: " + getOnlineCount());
 	}
 
 	@OnMessage
 	public void onMessage(String message, Session session) throws IOException {
 		System.out.println("New message: " + message);
-		// Send to all the people
+		// Send to all the employees
 		for (MessageSocket messageSocket : messageSocketSet) {
 			messageSocket.sendMessage(message);
 		}

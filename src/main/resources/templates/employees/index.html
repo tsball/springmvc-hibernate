@@ -10,23 +10,27 @@
 	<h1 layout:fragment="header">人员管理</h1>
 	
 	<div layout:fragment="content" class="container">
-		<a th:href="@{/people/add}" class="btn btn-default">新增人员</a>
+		<a th:href="@{/employees/add}" class="btn btn-default">新增人员</a>
 		<div th:text="${notice}"></div>
 		<table border="1">
 			<thead>
 				<tr>
 					<th width="200">身份编号</th>
 					<th width="200">姓名</th>
+					<th width="200">职位</th>
+					<th width="200">上级</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="obj : ${page}">
-					<td><a th:href="@{/people/{id}(id=${obj.id})}" th:text="${obj.code}"></a></td>
-					<td><a th:href="@{/people/{id}(id=${obj.id})}" th:text="${obj.name}"></a></td>
+					<td><a th:href="@{/employees/{id}(id=${obj.id})}" th:text="${obj.code}"></a></td>
+					<td><a th:href="@{/employees/{id}(id=${obj.id})}" th:text="${obj.name}"></a></td>
+					<td th:text="${obj.role.name}"></td>
+					<td th:text="${obj.manager.name}"></td>
 					<td>
-						<a th:href="@{/people/{id}/edit(id=${obj.id})}">Edit</a>
-						<a href="javascript:void(0);" th:attr="data-href=@{/people/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>
+						<a th:href="@{/employees/{id}/edit(id=${obj.id})}">Edit</a>
+						<a href="javascript:void(0);" th:attr="data-href=@{/employees/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>
 					</td>
 				</tr>
 			</tbody>

@@ -28,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
    */
   public User findByUsername(String username);
   
-  //@Query(value="SELECT u FROM User u JOIN FETCH u.person JOIN FETCH u.roles",
+  //@Query(value="SELECT u FROM User u JOIN FETCH u.employee JOIN FETCH u.roles",
   //		countQuery="SELECT count(u) FROM User u")
   //Page<User> findAll(Specification<User> spec, Pageable pageable);
 

@@ -54,8 +54,8 @@ public class User implements UserDetails {
 	
 	@ManyToOne
 	//@Fetch(FetchMode.JOIN)
-	@JoinColumn(name="person_id")
-	private Person person;
+	@JoinColumn(name="employee_id")
+	private Employee employee;
 	
 	@ManyToMany(mappedBy="users")
 	private Set<Notification> notifications = new HashSet<Notification>(0);
@@ -136,12 +136,12 @@ public class User implements UserDetails {
 	    this.authorities = authorities;
 	}
 
-	public Person getPerson() {
-		return person;
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 	@Override

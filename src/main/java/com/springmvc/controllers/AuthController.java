@@ -16,10 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.Sets;
 import com.springmvc.forms.UserForm;
-import com.springmvc.models.Person;
+import com.springmvc.models.Employee;
 import com.springmvc.models.Role;
 import com.springmvc.models.User;
-import com.springmvc.repositories.PersonRepository;
+import com.springmvc.repositories.EmployeeRepository;
 import com.springmvc.repositories.RoleRepository;
 import com.springmvc.repositories.UserRepository;
 import com.springmvc.services.ISecurityService;
@@ -34,7 +34,7 @@ public class AuthController {
     @Autowired UserValidator userValidator;
     @Autowired UserRepository userRepository;
     @Autowired RoleRepository roleRepository;
-    @Autowired PersonRepository personRepository;
+    @Autowired EmployeeRepository employeeRepository;
     @Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired UserValidator userValidtor;
 	
@@ -43,10 +43,10 @@ public class AuthController {
     	ModelAndView mv = new ModelAndView("auth/registration");
     	
     	Iterable<Role> roles = roleRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
-		Iterable<Person> people = personRepository.findAll();
+		Iterable<Employee> employees = employeeRepository.findAll();
 		
 		mv.addObject("roles", roles);
-		mv.addObject("people", people);
+		mv.addObject("employees", employees);
         mv.addObject("userForm", new UserForm());
 
         return mv;
@@ -69,7 +69,7 @@ public class AuthController {
 		user.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		user.setRoles(Sets.newHashSet(roles));
-		user.setPerson(personRepository.findOne(form.getPerson()));
+		user.setEmployee(employeeRepository.findOne(form.getEmployee()));
 		userRepository.save(user);
 		
 		// auto log in

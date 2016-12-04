@@ -20,7 +20,7 @@ public class LeaveService implements ILeaveService {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Page<Leave> findApplyList(Long applyPersonId, Pageable pageable) {
+	public Page<Leave> findApplyList(Long applyEmployeeId, Pageable pageable) {
 		String sql = "select l.*"
 				+ " from leaves l"
 				+ " inner join act_hi_procinst p on p.PROC_INST_ID_=l.process_instance_id";

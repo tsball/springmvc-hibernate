@@ -4,18 +4,21 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "people")
-public class Person {
+@Table(name = "employees")
+public class Employee {
 
     @Id
     @GeneratedValue
@@ -27,12 +30,23 @@ public class Person {
     @Column(nullable = false, unique = true)
     private String code;
     
-    @OneToMany(mappedBy="person", orphanRemoval=true)
+    @OneToMany(mappedBy="employee", orphanRemoval=true)
     @OrderBy("username ASC")
     private Set<User> users = new HashSet<User>(0);
     
-    @OneToMany(mappedBy="person", orphanRemoval=true)
+    @OneToMany(mappedBy="employee", orphanRemoval=true)
     private Set<Leave> leaves = new HashSet<Leave>(0);
+    
+    @ManyToOne(cascade={CascadeType.ALL})
+	@JoinColumn(name="manager_id")
+	private Employee manager;
+
+	@OneToMany(mappedBy="manager")
+	private Set<Employee> subordinates = new HashSet<Employee>();
+    
+    @ManyToOne
+	@JoinColumn(name="role_id")
+    private Role role;
     
     @NotNull
 	private Timestamp createdAt;
@@ -40,9 +54,9 @@ public class Person {
 	@NotNull
 	private Timestamp updatedAt;
 	
-	public Person() {}
+	public Employee() {}
 	
-	public Person(Long id) {
+	public Employee(Long id) {
 		this.id = id;
 	}
 
@@ -101,5 +115,29 @@ public class Person {
 	public void setLeaves(Set<Leave> leaves) {
 		this.leaves = leaves;
 	}
-    
+
+	public Employee getManager() {
+		return manager;
+	}
+
+	public void setManager(Employee manager) {
+		this.manager = manager;
+	}
+
+	public Set<Employee> getSubordinates() {
+		return subordinates;
+	}
+
+	public void setSubordinates(Set<Employee> subordinates) {
+		this.subordinates = subordinates;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 }

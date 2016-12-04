@@ -38,8 +38,8 @@ public class Leave {
     private String reason;
     
     @ManyToOne
-	@JoinColumn(name="person_id")
-	private Person person;
+	@JoinColumn(name="employee_id")
+	private Employee employee;
     
     @Column(nullable = false)
     private String processInstanceId; 
@@ -98,12 +98,12 @@ public class Leave {
 		this.reason = reason;
 	}
 
-	public Person getPerson() {
-		return person;
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 	public String getProcessInstanceId() {

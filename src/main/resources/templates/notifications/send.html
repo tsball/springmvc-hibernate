@@ -90,7 +90,7 @@ function send()
 		var content = $('[name="content"]').val();
 		
 		if (targetUserId != "") {
-			// send specified people
+			// send specified employees
 			
 			stompClient.send("/user/"+ targetUserId +"/message", {}, content);
 		} else {

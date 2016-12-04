@@ -29,36 +29,39 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.springmvc.forms.PersonForm;
-import com.springmvc.models.Person;
-import com.springmvc.repositories.PersonRepository;
+import com.springmvc.forms.EmployeeForm;
+import com.springmvc.models.Employee;
+import com.springmvc.models.Role;
+import com.springmvc.repositories.EmployeeRepository;
+import com.springmvc.repositories.RoleRepository;
 import com.springmvc.representations.TaskRepresentation;
 import com.springmvc.services.ActivitiTaskService;
 import com.springmvc.services.OperationLogService;
 import com.springmvc.utils.DateTimeUtil;
 
 @RestController
-@RequestMapping("/people")
-public class PersonController {
+@RequestMapping("/employees")
+public class EmployeeController {
 	
-	@Autowired PersonRepository personRepository;
+	@Autowired EmployeeRepository employeeRepository;
 	@Autowired ActivitiTaskService activitiTaskService;
 	@Autowired OperationLogService operationLogService;
+	@Autowired RoleRepository roleRepository;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listAllUsers() {
-		ModelAndView mv = new ModelAndView("/people/index");
+		ModelAndView mv = new ModelAndView("/employees/index");
 		
 		Pageable pageable = new PageRequest(0, 10, Sort.Direction.ASC, "name");
-		Specification<Person> spec = new Specification<Person>() {  
+		Specification<Employee> spec = new Specification<Employee>() {  
             @Override  
-            public Predicate toPredicate(Root<Person> root, CriteriaQuery<?> query, CriteriaBuilder cb) {  
-                root = query.from(Person.class); // from table/join/fetch
+            public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {  
+                root = query.from(Employee.class); // from table/join/fetch
                 Path<String> nameExp = root.get("name");  
                 return cb.like(nameExp, "%P%");  
             }
         };
-		Page<Person> page = personRepository.findAll(spec, pageable);
+		Page<Employee> page = employeeRepository.findAll(spec, pageable);
 		
 		mv.addObject("page", page);		
 		return mv;
@@ -66,19 +69,19 @@ public class PersonController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ModelAndView show(@PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/people/show");
+		ModelAndView mv = new ModelAndView("/employees/show");
 		
-		Person person = personRepository.findOne(id);
+		Employee employee = employeeRepository.findOne(id);
 		
-		mv.addObject("person", person);
+		mv.addObject("employee", employee);
 		return mv;
 	}
 	
 	@RequestMapping(value="/{id}/tasks", method= RequestMethod.GET)
     public ModelAndView tasks(@PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/people/tasks");
+		ModelAndView mv = new ModelAndView("/employees/tasks");
 		
-		Person person = personRepository.findOne(id);
+		Employee employee = employeeRepository.findOne(id);
 		
         List<Task> tasks = activitiTaskService.getTasks(id);
         List<TaskRepresentation> taskRepresentations = new ArrayList<TaskRepresentation>();
@@ -86,16 +89,16 @@ public class PersonController {
         	taskRepresentations.add(new TaskRepresentation(task.getId(), task.getName()));
         }
         
-        mv.addObject("person", person);
+        mv.addObject("employee", employee);
         mv.addObject("taskRepresentations", taskRepresentations);
 		return mv;
     }
 	
 	@RequestMapping(value="/{id}/leaves", method= RequestMethod.GET)
     public ModelAndView leaves(@PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/people/leaves");
+		ModelAndView mv = new ModelAndView("/employees/leaves");
 		
-		Person person = personRepository.findOne(id);
+		Employee employee = employeeRepository.findOne(id);
 		
         List<Task> tasks = activitiTaskService.getTasks(id);
         List<TaskRepresentation> taskRepresentations = new ArrayList<TaskRepresentation>();
@@ -103,7 +106,7 @@ public class PersonController {
         	taskRepresentations.add(new TaskRepresentation(task.getId(), task.getName()));
         }
         
-        mv.addObject("person", person);
+        mv.addObject("employee", employee);
         mv.addObject("taskRepresentations", taskRepresentations);
 		return mv;
     }
@@ -111,84 +114,93 @@ public class PersonController {
 	@RequestMapping(value="/{id}/tasks", method = RequestMethod.POST)
 	public ModelAndView startTask(@PathVariable("id") Long id, final RedirectAttributes redirectAttr) {
 		
-		Person person = personRepository.findOne(id);
+		Employee employee = employeeRepository.findOne(id);
 		
-		activitiTaskService.startProcess(person);
+		activitiTaskService.startProcess(employee);
 		
 		redirectAttr.addFlashAttribute("notice", "Start task successed!");
 		
-		return new ModelAndView("redirect:/people/" + person.getId() + "/tasks");
+		return new ModelAndView("redirect:/employees/" + employee.getId() + "/tasks");
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("/people/add", "person", new Person());
+		ModelAndView mv = new ModelAndView("/employees/add", "employee", new Employee());
 		
+		List<Role> roles = roleRepository.findAll();
+		
+		mv.addObject("roles", roles);
 		return mv;
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ResponseEntity<?> create(HttpServletRequest request, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ResponseEntity<?> create(HttpServletRequest request, @Valid EmployeeForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
 		
-		Person person = new Person();
-		BeanUtils.copyProperties(form, person);
-		person.setCreatedAt(DateTimeUtil.getCurrTimestamp());
-		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		personRepository.save(person);
+		Employee employee = new Employee();
+		BeanUtils.copyProperties(form, employee);
+		employee.setRole(roleRepository.findOne(form.getRole()));
+		employee.setManager(employeeRepository.findOne(form.getManager()));
+		employee.setCreatedAt(DateTimeUtil.getCurrTimestamp());
+		employee.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		employeeRepository.save(employee);
 		
 		// operation log
-		operationLogService.logCreateOption(person);
+		operationLogService.logCreateOption(employee);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(person.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(employee.getId());
 	}
 	
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public ModelAndView edit(HttpServletRequest request, @PathVariable("id") Long id) {
-		ModelAndView mv = new ModelAndView("/people/edit");
+		ModelAndView mv = new ModelAndView("/employees/edit");
 		
-		Person person = personRepository.findOne(id);
+		Employee employee = employeeRepository.findOne(id);
+		List<Role> roles = roleRepository.findAll();
 		
-		mv.addObject("person", person);
+		mv.addObject("roles", roles);
+		mv.addObject("employee", employee);
 		return mv;
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid PersonForm form, BindingResult result, final RedirectAttributes redirectAttr) {
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid EmployeeForm form, BindingResult result, final RedirectAttributes redirectAttr) {
 		
 		if (result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldErrors());
 		}
 		
-		Person person = personRepository.findOne(id);
-		Person oldPerson = new Person();
-		BeanUtils.copyProperties(person, oldPerson);
+		Employee employee = employeeRepository.findOne(id);
+		Employee oldEmployee = new Employee();
+		BeanUtils.copyProperties(employee, oldEmployee);
 		
-		if (person == null) {
-			return ResponseEntity.status(HttpStatus.NOT_EXTENDED).body("Person can not found with id: " + id);
+		if (employee == null) {
+			return ResponseEntity.status(HttpStatus.NOT_EXTENDED).body("Employee can not found with id: " + id);
 		}
 		
-		BeanUtils.copyProperties(form, person);
-		person.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
-		personRepository.save(person);
+		BeanUtils.copyProperties(form, employee);
+		employee.setRole(roleRepository.findOne(form.getRole()));
+		employee.setManager(employeeRepository.findOne(form.getManager()));
+		employee.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
+		employeeRepository.save(employee);
 		
 		// operation log
-		operationLogService.logUpdateOption(oldPerson, person);
+		operationLogService.logUpdateOption(oldEmployee, employee);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(person.getId());
+		return ResponseEntity.status(HttpStatus.OK).body(employee.getId());
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	public ModelAndView delete(@PathVariable("id") Long id, final RedirectAttributes redirectAttr) {
 		
-		personRepository.delete(id);
+		employeeRepository.delete(id);
 		
 		redirectAttr.addFlashAttribute("notice", "Delete success!");
 		
-		return new ModelAndView("redirect:/people");
+		return new ModelAndView("redirect:/employees");
 	}
 	
 }

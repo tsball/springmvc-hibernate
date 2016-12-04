@@ -6,28 +6,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Person List</title>
+<title>Leave List</title>
 
 </head>
 <body>
-<h1>Leave Management</h1>
+<h1>Employee Leaves</h1>
 	<a href="${pageContext.request.contextPath}/leaves/add">Apply a leave</a>
 	<div>${notice}</div>
 	<table border="1">
 		<thead>
 			<tr>
-				<th width="200">Leave Type</th>
-				<th>Reason</th>
-				<th width="200">Created At</th>
+				<th width="200">Task Id</th>
+				<th width="200">Task Name</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${leaves}" var="obj">
+			<c:forEach items="${taskRepresentations}" var="obj">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/leaves/${obj.id}">${obj.leaveType}</a></td>
-				<td>${obj.reason}</td>
-				<td>${obj.createdAt}</td>
+				<td>${obj.id}</td>
+				<td>${obj.name}</td>
 				<td>
 					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leaves/${obj.id}/agree" data-method="PATCH">Agree</a>
 					<a href="javascript:void(0);" data-href="${pageContext.request.contextPath}/leaves/${obj.id}/reject" data-method="PATCH">Reject</a>
@@ -38,18 +36,4 @@
 		</tbody>
 	</table>
 </body>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.11.0.min.js" ></script>
-<script type="text/javascript">
-$(function(){
-	// Restful Delete
-	$('a[data-method]').click(function(event){
-		event.preventDefault();
-		
-		var url = $(this).attr('data-href');
-		var http_verb = $(this).attr('data-method');
-		var csrf = '<input type="hidden" name="_csrf" value="${_csrf.token}"/>';
-		$('<form action="'+ url +'" method="POST"><input type="hidden" name="_method" value="'+ http_verb +'" />'+ csrf +'</form>').submit();
-	});
-});
-</script>
 </html>

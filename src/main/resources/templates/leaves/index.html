@@ -31,7 +31,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="obj : ${page}">
-					<td><a th:href="@{/leaves/{id}(id=${obj.id})}" th:text="${obj.person.name}"></a></td>
+					<td><a th:href="@{/leaves/{id}(id=${obj.id})}" th:text="${obj.employee.name}"></a></td>
 					<td><th:block th:text="${obj.beginAt}" /> ~ <th:block th:text="${obj.endAt}" /></td>
 					<td th:text="${obj.days}"></td>
 					<td th:text="${obj.reason}"></td>

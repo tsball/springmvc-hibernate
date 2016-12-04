@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -42,6 +43,9 @@ public class Role {
 	@ManyToMany // support to save the role.authorities in this side with the join table message
 	@JoinTable(name = "roles_authorities", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private Set<Authority> authorities = new HashSet<Authority>(0);
+	
+	@OneToMany(mappedBy="role", orphanRemoval=true)
+    private Set<Employee> employees = new HashSet<Employee>(0);
 
 	public long getId() {
 		return id;
@@ -97,6 +101,14 @@ public class Role {
 
 	public void setAuthorities(Set<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public Set<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(Set<Employee> employees) {
+		this.employees = employees;
 	}
 	
 }

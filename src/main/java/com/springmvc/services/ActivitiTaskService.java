@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springmvc.constants.TaskKeyConst;
-import com.springmvc.models.Person;
-import com.springmvc.repositories.PersonRepository;
+import com.springmvc.models.Employee;
+import com.springmvc.repositories.EmployeeRepository;
 
 @Service
 @Transactional
@@ -27,15 +27,15 @@ public class ActivitiTaskService {
     private TaskService taskService;
 
     @Autowired
-    private PersonRepository personRepository;
+    private EmployeeRepository employeeRepository;
 
-    public void startProcess(Person person) {
+    public void startProcess(Employee employee) {
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("person", person);
+        variables.put("employee", employee);
         runtimeService.startProcessInstanceByKey(TaskKeyConst.ONE_TASK_PROCESS, variables);
     }
 
-    public List<Task> getTasks(Long personId) {
-        return taskService.createTaskQuery().taskAssignee(personId.toString()).list();
+    public List<Task> getTasks(Long employeeId) {
+        return taskService.createTaskQuery().taskAssignee(employeeId.toString()).list();
     }
 }

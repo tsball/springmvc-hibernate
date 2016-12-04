@@ -24,8 +24,8 @@
             </div>
             
             <div class="form-group">
-				<select name="person">
-   					<option th:each="obj : ${people}" th:value="${obj.id}" th:text="${obj.name}" />
+				<select name="employee">
+   					<option th:each="obj : ${employees}" th:value="${obj.id}" th:text="${obj.name}" />
                 </select>
 			</div>
 	        
@@ -51,7 +51,7 @@ $(function(){
 				required: true,
 				minlength: 2
 			},
-			person: {
+			employee: {
 				required: true
 			},
 			password: {
@@ -72,8 +72,8 @@ $(function(){
 				required: "Please enter a username",
 				minlength: "Your username must consist of at least 2 characters"
 			},
-			person: {
-				required: "Please select a person"
+			employee: {
+				required: "Please select a employee"
 			},
 			password: {
 				required: "Please provide a password",

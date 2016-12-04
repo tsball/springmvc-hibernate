@@ -10,7 +10,7 @@
 	<h1 layout:fragment="header">新增人员</h1>
 	
 	<div layout:fragment="content" class="container">
-		<form method="POST" th:action="@{/people/}" class="form-validation">
+		<form method="POST" th:action="@{/employees/}" class="form-validation">
 			<div class="form-group">
                 <input type="text" name="name" class="form-control" placeholder="Name" autofocus="autofocus" />
             </div>
@@ -18,6 +18,18 @@
             <div class="form-group">
                 <input type="text" name="code" class="form-control" placeholder="Code" />
             </div>
+            
+            <div class="form-group">
+				<select name="role">
+   					<option th:each="obj : ${roles}" th:value="${obj.id}" th:text="${obj.name}" />
+                </select>
+			</div>
+			
+			<div class="form-group">
+				<select name="employee">
+   					<option th:each="obj : ${employees}" th:value="${obj.id}" th:text="${obj.name}" />
+                </select>
+			</div>
 	        
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 		</form>
@@ -64,7 +76,7 @@ function formSubmitHandler(form) {
         $('#btn-submit').append("中...");
       },
       success: function (response) {
-    	  location.href = "/people/" + response;
+    	  location.href = "/employees/" + response;
       },
       error: function(xhr, status, error) {
     	  //status: error

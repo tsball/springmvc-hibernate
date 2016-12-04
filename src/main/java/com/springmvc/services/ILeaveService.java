@@ -7,6 +7,6 @@ import com.springmvc.models.Leave;
 
 public interface ILeaveService {
 	
-	Page<Leave> findApplyList(Long applyPersonId, Pageable pageable);
+	Page<Leave> findApplyList(Long applyEmployeeId, Pageable pageable);
 	
 }
