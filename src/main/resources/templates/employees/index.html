@@ -27,7 +27,7 @@
 					<td><a th:href="@{/employees/{id}(id=${obj.id})}" th:text="${obj.code}"></a></td>
 					<td><a th:href="@{/employees/{id}(id=${obj.id})}" th:text="${obj.name}"></a></td>
 					<td th:text="${obj.role.name}"></td>
-					<td th:text="${obj.manager.name}"></td>
+					<td><th:block th:if="${obj.manager != null}" th:text="${obj.manager.name}"></th:block></td>
 					<td>
 						<a th:href="@{/employees/{id}/edit(id=${obj.id})}">Edit</a>
 						<a href="javascript:void(0);" th:attr="data-href=@{/employees/{id}(id=${obj.id})}" data-method="DELETE">Delete</a>

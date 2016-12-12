@@ -45,7 +45,7 @@ public class Employee {
 	private Set<Employee> subordinates = new HashSet<Employee>();
     
     @ManyToOne
-	@JoinColumn(name="role_id")
+	@JoinColumn(name="role_id", nullable = false)
     private Role role;
     
     @NotNull

@@ -27,7 +27,7 @@
 			
 			<div class="form-group">
 				<select th:name="manager" th:field="*{employee.manager}">
-   					<option th:each="obj : ${employees}" th:value="${obj.id}" th:text="${obj.name}" />
+   					<option th:each="obj : ${managers}" th:value="${obj.id}" th:text="${obj.name}" />
                 </select>
 			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>

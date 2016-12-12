@@ -3,11 +3,6 @@ package com.springmvc.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -16,9 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -52,16 +44,17 @@ public class EmployeeController {
 	public ModelAndView listAllUsers() {
 		ModelAndView mv = new ModelAndView("/employees/index");
 		
-		Pageable pageable = new PageRequest(0, 10, Sort.Direction.ASC, "name");
-		Specification<Employee> spec = new Specification<Employee>() {  
-            @Override  
-            public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {  
-                root = query.from(Employee.class); // from table/join/fetch
-                Path<String> nameExp = root.get("name");  
-                return cb.like(nameExp, "%P%");  
-            }
-        };
-		Page<Employee> page = employeeRepository.findAll(spec, pageable);
+		// Pageable pageable = new PageRequest(0, 10, Sort.Direction.ASC, "name");
+		//Specification<Employee> spec = new Specification<Employee>() {  
+        //    @Override  
+        //    public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {  
+        //        root = query.from(Employee.class); // from table/join/fetch
+        //        Path<String> nameExp = root.get("name");  
+        //        return cb.like(nameExp, "%邓%");
+        //    }
+        //};
+		// Page<Employee> page = employeeRepository.findAll(spec, pageable);
+		Page<Employee> page = employeeRepository.findAll(new PageRequest(0, 10));
 		
 		mv.addObject("page", page);		
 		return mv;
@@ -128,8 +121,10 @@ public class EmployeeController {
 		ModelAndView mv = new ModelAndView("/employees/add", "employee", new Employee());
 		
 		List<Role> roles = roleRepository.findAll();
+		List<Employee> managers = employeeRepository.findAll();
 		
 		mv.addObject("roles", roles);
+		mv.addObject("managers", managers);
 		return mv;
 	}
 	
@@ -143,7 +138,9 @@ public class EmployeeController {
 		Employee employee = new Employee();
 		BeanUtils.copyProperties(form, employee);
 		employee.setRole(roleRepository.findOne(form.getRole()));
-		employee.setManager(employeeRepository.findOne(form.getManager()));
+		if (form.getManager() != null) {
+			employee.setManager(employeeRepository.findOne(form.getManager()));
+		}
 		employee.setCreatedAt(DateTimeUtil.getCurrTimestamp());
 		employee.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		employeeRepository.save(employee);
@@ -160,9 +157,11 @@ public class EmployeeController {
 		
 		Employee employee = employeeRepository.findOne(id);
 		List<Role> roles = roleRepository.findAll();
+		List<Employee> managers = employeeRepository.findAll();
 		
 		mv.addObject("roles", roles);
 		mv.addObject("employee", employee);
+		mv.addObject("managers", managers);
 		return mv;
 	}
 	
@@ -183,7 +182,9 @@ public class EmployeeController {
 		
 		BeanUtils.copyProperties(form, employee);
 		employee.setRole(roleRepository.findOne(form.getRole()));
-		employee.setManager(employeeRepository.findOne(form.getManager()));
+		if (form.getManager() != null) { 
+			employee.setManager(employeeRepository.findOne(form.getManager()));
+		}
 		employee.setUpdatedAt(DateTimeUtil.getCurrTimestamp());
 		employeeRepository.save(employee);
 		

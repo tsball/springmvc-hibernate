@@ -1,5 +1,6 @@
 package com.springmvc.forms;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -7,16 +8,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class EmployeeForm {
 
 	@NotEmpty
-    @Size(min=5, max=16)
+    @Size(min=2, max=50)
 	private String name;
 
 	@NotEmpty
 	private String code;
 	
-	@NotEmpty
+	@NotNull
 	private Long role;
 	
-	@NotEmpty
 	private Long manager;
 
 	public String getName() {
